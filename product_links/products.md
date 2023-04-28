@@ -1,8 +1,8 @@
-This document contains a list of the physical tools that are used throughout the lesson along with links to where the items can be purchased. 
+# This document contains a list of the physical tools that are used throughout the lesson along with links to where the items can be purchased. 
 
 I have selected these tools as the best balance of affordability and quality that I was able to find in an effort to keep this course as affordable as possible. I have tested them and used them throughout the recording of this course. That being said, if you are interested in continuing with hardware hacking you may want to invest in more expensive tools, I'd encourage you to do so however I can only support and guarantee the lab activities will work with the tools in this list. 
 
-I've split the list into three sections:
+## I've split the list into three sections:
 
 1. Required for Hands-On participation: These items are required at a minimum if you'd like to participate in the majority of the hands portsions of the lesson.
 2. Suggested for Hands-On: These items will make your life easier or are required for some of the hands-on but alternatives exist if you'd prefer not to purchase.
@@ -11,7 +11,7 @@ I've split the list into three sections:
 Note that I've tried to add in as much detail as possible about what each tool will be used for and if there are alternatives to purchasing. 
 None of the links provided are affiliate links and I make no commission of of their sales. 
 
-Required:
+## Required:
 
 Practice Target - TPLINK Router
 
@@ -21,13 +21,13 @@ Male through hole header pins
 
 Digital Multimeter
 
-Suggested:
+## Suggested:
 
 Protocol Analyzer
 
 Spudger tool kit
 
-Optional:
+## Optional:
 
 SOIC 8 clip and programmer
 
