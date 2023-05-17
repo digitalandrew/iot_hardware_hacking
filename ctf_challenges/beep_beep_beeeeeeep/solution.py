@@ -16,7 +16,7 @@ with open('digital.csv', newline='') as csvfile:
     transmission = ''
     for data in data_points[1:]:
         pulse_duration = float(data['time']) - float(past_time_point)
-        if past_data_point == '0' and pulse_duration > 0.015:
+        if past_data_point == '0' and pulse_duration > 0.145:
             transmission += morse_library[character]
             character = ''
 
