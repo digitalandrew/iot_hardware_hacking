@@ -25,7 +25,7 @@
 
 ## Visual Inspection
 
-Inspected exterior of router, noted label on the back that contained FCC Id for further review. 
+Inspected exterior of router, noted label on the back that contained FCC ID for further review. 
 
 FCC ID: 2AXJ4WR841NV14
 
