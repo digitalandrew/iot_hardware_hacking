@@ -1,4 +1,24 @@
 
+#Test Details
+
+## Target Information
+
+*Manufacturer:* TP-Link
+
+*Part Number:* TL-WR841N
+
+*Serial Number:* 22295L6001357
+ 
+## Test-Equipment
+ 
+*Multimeter:* ASTRO AI AM33D
+
+*Logic Analyzer:* Comidox USB Logic Analyzer
+
+*Software:* 
+- Sigrok Pulsview (for logic captures)
+- NMAP
+- Firefox
 
 
 # Initial Recon
