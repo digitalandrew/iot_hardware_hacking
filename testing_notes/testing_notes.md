@@ -3,17 +3,17 @@
 
 ## Target Information
 
-*Manufacturer:* TP-Link
+**Manufacturer:** TP-Link
 
-*Part Number:* TL-WR841N
+**Part Number:** TL-WR841N
 
-*Serial Number:* 22295L6001357
+**Serial Number:** 22295L6001357
  
 ## Test-Equipment
  
-*Multimeter:* ASTRO AI AM33D
+**Multimeter:** ASTRO AI AM33D
 
-*Logic Analyzer:* Comidox USB Logic Analyzer
+**Logic Analyzer:** Comidox USB Logic Analyzer
 
 *Software:* 
 - Sigrok Pulsview (for logic captures)
@@ -104,17 +104,17 @@ Chip C was Id'd as cFeon QH32B-104HIP.
 
 Data sheets were located online for each of the chips. 
 
-*MEDIATEK MT7628NN:* System On Chip (SOC) containing CPU. Important details included that this is a purpose built SOC for N300 routers. The CPU is MIPS24KEc, supports Linux 2.6.36 SDK and Linux 3.10 SDK. Interfaces with flash memory via SPI.
+**MEDIATEK MT7628NN:** System On Chip (SOC) containing CPU. Important details included that this is a purpose built SOC for N300 routers. The CPU is MIPS24KEc, supports Linux 2.6.36 SDK and Linux 3.10 SDK. Interfaces with flash memory via SPI.
 
 Product Page: https://www.mediatek.com/products/home-networking/mt7628k-n-a
 
 Data Sheet: https://files.seeedstudio.com/products/114992470/MT7628_datasheet.pdf
 
-*Zentel A3S56D40GTP -50L:* DRAM 32Kb
+**Zentel A3S56D40GTP -50L:** DRAM 32Kb
 
 Data Sheet: https://www.mouser.ca/datasheet/2/1130/DSA3S56D340GTPF_02-1984099.pdf
 
-cFeon QH32B-104HIP: Id'd as full part number EN25Q32B-104HIP. Noted as Flash ROM that communicates via SPI. 
+**cFeon QH32B-104HIP:** Id'd as full part number EN25Q32B-104HIP. Noted as Flash ROM that communicates via SPI. 
 
 Data Sheet: https://www.alldatasheet.com/datasheet-pdf/pdf/675622/EON/EN25QH32A.html
 
