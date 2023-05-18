@@ -15,7 +15,7 @@
 
 **Logic Analyzer:** Comidox USB Logic Analyzer
 
-*Software:* 
+**Software:** 
 - Sigrok Pulsview (for logic captures)
 - NMAP
 - Firefox
