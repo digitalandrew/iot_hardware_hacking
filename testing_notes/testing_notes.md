@@ -165,6 +165,7 @@ https://ktln2.org/2020/03/29/exploiting-mips-router/
 
 # Enumeration via UART Connection
 
+## Reviewing Bootlogs
 Connected USB to UART adapter to the previously located UART pins based on the below pinout:
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/UART+to+USB+pinout.jpg)
@@ -173,7 +174,7 @@ Opened Terminal Session via Screen with the previously identified baud rate.
 
 After powering on the router the bootloader logging and linux initilization logging from init and init scripts was displayed over the serial console session:
 
-**Command: `screen /dev/ttyUSB0 115200`
+**Command**: `screen /dev/ttyUSB0 115200`
 
 ```
 [04080B0F][04080C0C][8A7F0000][26253B38][00262539]
@@ -638,7 +639,7 @@ Appears to be a repurposed build of open source version `U-Boot 1.1.3 (Feb  3 20
 
 Bootloader default selected `3: System Boot system code via Flash.(0xbc010000)` as the boot option, may be able to interrupt boot process and select another boot option
 
-**Linux Initilization:
+**Linux Initilization**:
 
 Version: `Linux version 2.6.36 (jenkins@mobile-System) (gcc version 4.6.3 (Buildroot 2012.11.1) ) #1 Wed Feb 3 10:13:07 CST 2021`
 
@@ -650,13 +651,21 @@ Shows the console being set to ttyS1 with baud rate 115200 (this is the console 
 
 Boot Partition Details:
 EN25Q32B(1c 30161c30) (4096 Kbytes)
+
 mtd .name = raspi, .size = 0x00400000 (4M) .erasesize = 0x00010000 (64K) .numeraseregions = 0
+
 Creating 5 MTD partitions on "raspi":
+
 0x000000000000-0x000000010000 : "boot"
+
 0x000000010000-0x000000100000 : "kernel"
+
 0x000000100000-0x0000003e0000 : "rootfs"
+
 mtd: partition "rootfs" set to be root filesystem
+
 0x0000003e0000-0x0000003f0000 : "config"
+
 0x0000003f0000-0x000000400000 : "radio"
 
 Identifies flash chip as EN25Q32B (the same chip we ID'd in initial recon)
@@ -679,6 +688,39 @@ Dropbear:
 Mutliple details about Dropbear initilization including the below line which also reveals what is most likely a writeable filepath. 
 
 `[ util_execSystem ] 141:  prepareDropbear cmd is "dropbearkey -t rsa -f /var/tmp/dropbear/dropbear_rsa_host_key"`
+
+## Enumeration via UART Shell
+
+Pressing Enter revealed there was shell access with no logon as root user:
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/initial_shell_access.png)
+
+Checking over the available binaries in the bin folder, busybox was discoverd: 
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/busbox_bin_id.png)
+
+Busybox is a popular binary used on embedded systems as it packages many common Linux/Unix binaries into one smaller package. 
+
+Observing the available functions in busybox it was noted that this appears to be a stripped down version of Busybox, however TFTP was still available. 
+
+The full version of Busybox was downloaded from: https://busybox.net/downloads/binaries/
+
+The TFTP from the existing busybox was then used to transfer over the full version of busybox. 
+
+Command From Kali VM to start TFTP server as daemon: `sudo atftpd --daemon`
+
+Created a folder to transfer over tools in `/var/tmp/_tools` /var was previously identified as writable. 
+
+Command from Router to initiate file transfer: `tftp -r busybox-mipsel -g 192.168.0.100`
+
+The full version of busybox was then available to user for further enumeration. 
+
+
+
+
+
+
+
 
 
 
