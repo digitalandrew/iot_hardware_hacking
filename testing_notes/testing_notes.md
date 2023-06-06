@@ -689,7 +689,7 @@ Mutliple details about Dropbear initilization including the below line which als
 
 `[ util_execSystem ] 141:  prepareDropbear cmd is "dropbearkey -t rsa -f /var/tmp/dropbear/dropbear_rsa_host_key"`
 
-##Enumeration via UART Shell
+## Enumeration via UART Shell
 
 Pressing Enter revealed there was shell access with no logon as root user:
 
@@ -779,7 +779,7 @@ Command: `/var/temp/_tools/busybox-mipsel netstat`
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/netstat+-+Copy.png)
 
-##Prompting Additional Console Log Messages
+## Prompting Additional Console Log Messages
 
 
 
