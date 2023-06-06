@@ -29,7 +29,7 @@ Inspected exterior of router, noted label on the back that contained FCC ID for 
 
 FCC ID: 2AXJ4WR841NV14
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/1cec36c0-270b-413a-aad3-6543f02a7bdf)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/router_ffc_id.jpg)
 
 Opened router case by removing two phillips screws and applying pressure between pressure fit parts with spudger tool.
 
