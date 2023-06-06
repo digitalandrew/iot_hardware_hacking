@@ -130,7 +130,7 @@ Nmap scans were performed for both TCP and UDP.
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/nmap_tcp_scan.png)
 
-![image]()
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/nmap_tcp_scan_2.png)
 
 TCP scans revealed 3 open ports:
 
@@ -144,7 +144,7 @@ Noteable detail confirmed suspicion that router is running Linux kernel 2.6.36.
 
 UDP scans reveled 2 open ports: 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/nmap_tcp_scan_2.png)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/nmap_udp_scan.png)
 
 Port 67/udp - dhcps
 
