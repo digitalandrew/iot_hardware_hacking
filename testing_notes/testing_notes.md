@@ -33,11 +33,11 @@ FCC ID: 2AXJ4WR841NV14
 
 Opened router case by removing two phillips screws and applying pressure between pressure fit parts with spudger tool.
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/011795b6-3f91-4ead-9689-a9f87266ec7b)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/router_opened.jpg)
 
 Noted three chips of interest on the PCB for further inspection (shown as details A, B, and C in picture below)
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/22c8bc20-1632-4270-ac75-03a2e10ef8a5)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/IMG-20230515-WA0013.jpg)
 
 ## On-board testing
 
@@ -60,7 +60,7 @@ Soldered through hole inline header pins to suspected UART connection to facilit
 
 Attached Logic Analyzer to TX and GND pins of UART connection and captured a transmission during boot up, screenshot of single tranmission frame shown below. 
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/26dab875-4c65-42c6-8531-6a8b2f11bcee)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/Uart_Capture_Single_Frame.png)
 
 Manual framing of the signal confirmed a UART transmission, noted the start bit, 8 data bits, one stop bit and no parity bit. 
 
