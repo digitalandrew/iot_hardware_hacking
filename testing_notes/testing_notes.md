@@ -171,6 +171,8 @@ Connected USB to UART adapter to the previously located UART pins based on the b
 
 Opened Terminal Session via Screen with the previously identified baud rate.
 
+After powering on the router the bootloader logging and linux initilization logging from init and init scripts was displayed over the serial console session:
+
 **Command: `screen /dev/ttyUSB0 115200`
 
 ```
@@ -628,6 +630,55 @@ start ntp_request
 [ util_execSystem ] 141:  oal_sys_unsetTZ cmd is "echo "" > /etc/TZ"
 ```
 
+Some key information of note from the boot logs were"
+
+**Bootloader:** 
+
+Appears to be a repurposed build of open source version `U-Boot 1.1.3 (Feb  3 2021 - 10:10:08)`, denoted as `Ralink UBoot Version: 4.3.0.0`
+
+Bootloader default selected `3: System Boot system code via Flash.(0xbc010000)` as the boot option, may be able to interrupt boot process and select another boot option
+
+**Linux Initilization:
+
+Version: `Linux version 2.6.36 (jenkins@mobile-System) (gcc version 4.6.3 (Buildroot 2012.11.1) ) #1 Wed Feb 3 10:13:07 CST 2021`
+
+CPU Information:  `CPU revision is: 00019655 (MIPS 24Kc)`
+
+Kernel Command Line: `Kernel command line: console=ttyS1,115200 root=/dev/mtdblock2 rootfstype=squashfs init=/sbin/init`
+
+Shows the console being set to ttyS1 with baud rate 115200 (this is the console session we are connected to). Show the root file system as type squashfs which is a compressed read-only file system. Show the initilization bin is /sbin/init.
+
+Boot Partition Details:
+EN25Q32B(1c 30161c30) (4096 Kbytes)
+mtd .name = raspi, .size = 0x00400000 (4M) .erasesize = 0x00010000 (64K) .numeraseregions = 0
+Creating 5 MTD partitions on "raspi":
+0x000000000000-0x000000010000 : "boot"
+0x000000010000-0x000000100000 : "kernel"
+0x000000100000-0x0000003e0000 : "rootfs"
+mtd: partition "rootfs" set to be root filesystem
+0x0000003e0000-0x0000003f0000 : "config"
+0x0000003f0000-0x000000400000 : "radio"
+
+Identifies flash chip as EN25Q32B (the same chip we ID'd in initial recon)
+
+Shows the partition of the ROM. 
+
+Initilization Script: 
+`starting pid 29, tty '': '/etc/init.d/rcS'`
+
+Shows the location of the initilization script. 
+
+Configuration Files:
+
+Multiple configuration files listed for use during start up, the below appears to be a main configuration file.
+
+`[ dm_readFile ] 2061:  can not open xml file /var/tmp/pc/reduced_data_model.xml!, about to open file /etc/reduced_data_model.xml`
+
+Dropbear: 
+
+Mutliple details about Dropbear initilization including the below line which also reveals what is most likely a writeable filepath. 
+
+`[ util_execSystem ] 141:  prepareDropbear cmd is "dropbearkey -t rsa -f /var/tmp/dropbear/dropbear_rsa_host_key"`
 
 
 
