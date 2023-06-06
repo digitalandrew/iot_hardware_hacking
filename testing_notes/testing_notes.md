@@ -763,7 +763,21 @@ The password file is being dynamically created on startup from the routers admin
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/dropbear_hash.png)
 
+## Checking Running Processes and Network Connections
 
+The busybox binary transferred was used again to check the running processes via ps. 
+
+Command: `/var/temp/_tools/busybox-mipsel ps`
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ps.png)
+
+Noted that all process were running as the admin user and there was no principal of least priveledge being followed. 
+
+The same process was followed to check running processes using netstat
+
+Command: `/var/temp/_tools/busybox-mipsel netstat` 
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/netstat+-+Copy.png)
 
 
 
