@@ -80,7 +80,7 @@ Used previously locataed FCC ID to find FCC Equipment Authorization filing for t
 
 Noted in the filing that the ID had been changed from the previoous TE7WR841NV14. 
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/db3f4150-f332-41a3-8eba-8fa7ca37e180)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ffc_id_change_request.png)
 
 Inspectng the previous filing (https://fccid.io/TE7WR841NV14) internal photos of the router were located. Unfortunately schematics, functional description and block diagram were redacted as confidential. 
 
@@ -128,9 +128,9 @@ Connected test computer to the network hosed by the router. Router IP address id
 
 Nmap scans were performed for both TCP and UDP. 
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/ef33b9e5-33d9-4a49-b163-5a0031db6e6d)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/nmap_tcp_scan.png)
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/6bd73c08-8c33-4485-830a-d5934641e78b)
+![image]()
 
 TCP scans revealed 3 open ports:
 
@@ -144,7 +144,7 @@ Noteable detail confirmed suspicion that router is running Linux kernel 2.6.36.
 
 UDP scans reveled 2 open ports: 
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/3b1244a3-50e4-44c2-9735-a28eb26b8a01)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/nmap_tcp_scan_2.png)
 
 Port 67/udp - dhcps
 
