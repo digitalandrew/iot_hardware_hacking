@@ -68,11 +68,11 @@ Measured the baud rate as 125,000 however based on standard serial baud rates su
 
 Based on these findings applied a UART decoder to the channel with the below settings. 
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/6fa28602-80fb-49ac-9345-2ab0911c7fe5)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/uart_decoder_settings.png)
 
 Decoded UART signal confirmed UART parameters and showed presence of boot loader and boot up logs to be investigated further. 
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/3a398efa-634a-44bd-8f07-ac341437fb26)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/uart_decoded_message.png)
 
 ## OSINT and Online Recon
 
@@ -84,21 +84,21 @@ Noted in the filing that the ID had been changed from the previoous TE7WR841NV14
 
 Inspectng the previous filing (https://fccid.io/TE7WR841NV14) internal photos of the router were located. Unfortunately schematics, functional description and block diagram were redacted as confidential. 
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/f822a904-bd09-4b9c-9b76-6079ae981f45)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/fcc-id-1.png)
 
 Detailed pictures of two chips of interest were shown that detailed the chip manufacturer and part number. 
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/ff42f8b7-f20d-42d4-b1bf-ca6e1cbdd6ca)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ffc-id-mediatek.png)
 
 Previously denoted chip A Id'd as MEDIATEK MT7628NN
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/5b348071-c52a-4f0c-8ce3-f0765f0e1d70)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/fcc-id-zentel.png)
 
 Previously denoted chip B Id'd as Zentel A3S56D40GTP -50L
 
 Unfortunately the markers on chip C were not readable in the FCC pictures. Returning to the test router, high resolution pictures were taken and blown up to Id chip. 
 
-![image](https://github.com/digitalandrew/iot_hardware_hacking/assets/3688593/7bdc1bab-85f2-4b4d-9ff0-5011e130bfec)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/cfeon_chip_id.jpg)
 
 Chip C was Id'd as cFeon QH32B-104HIP.
 
