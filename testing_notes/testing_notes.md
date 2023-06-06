@@ -15,10 +15,13 @@
 
 **Logic Analyzer:** Comidox USB Logic Analyzer
 
+**USB to UART Adapter:** Silicon Labs CP210x UART Bridge
+
 **Software:** 
 - Sigrok Pulsview (for logic captures)
 - NMAP
 - Firefox
+- Screen
 
 
 # Initial Recon
@@ -160,7 +163,15 @@ https://blog.viettelcybersecurity.com/1day-to-0day-on-tl-link-tl-wr841n/
 
 https://ktln2.org/2020/03/29/exploiting-mips-router/
 
+# Enumeration via UART Connection
 
+Connected USB to UART adapter to the previously located UART pins based on the below pinout:
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/UART+to+USB+pinout.jpg)
+
+Opened Terminal Session via Screen with the previously identified baud rate.
+
+** Command: `screen /dev/ttyUSB0 115200`
 
 
 
