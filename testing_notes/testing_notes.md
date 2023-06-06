@@ -703,6 +703,8 @@ Busybox is a popular binary used on embedded systems as it packages many common 
 
 Observing the available functions in busybox it was noted that this appears to be a stripped down version of Busybox, however TFTP was still available. 
 
+## Transferring Full Version of Busybox over TFTP
+
 The full version of Busybox was downloaded from: https://busybox.net/downloads/binaries/
 
 The TFTP from the existing busybox was then used to transfer over the full version of busybox. 
@@ -715,9 +717,51 @@ Command from Router to initiate file transfer: `tftp -r busybox-mipsel -g 192.16
 
 The full version of busybox was then available to user for further enumeration. 
 
+## Enumerating /var folder
 
+Using the new full version of Busybox grep was utilized to search for file with "pass" in it in order to identify possible hardcoded passwords. 
 
+Command: `/var/temp/_tools/busybox-mipsel grep -r 'pass' .`
 
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/grepping_pass.png)
+
+Noted three config files that may contain passwords and what appears to be a hashed password for Dropbear. 
+
+Config file passwords were blank, Dropbear hash was saved to attempt to crack at a later time. 
+
+Command: `/var/temp/_tools/busybox-mipsel grep -r 'pass' .`
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/grep_admin.png)
+
+Command: `/var/temp/_tools/busybox-mipsel find -name '*.xml'`
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/find_xml.png)
+
+Command: `/var/temp/_tools/busybox-mipsel find -name '*.conf'`
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/find_conf.png)
+
+Further enumeration of the config files did not reveal any additional useful information. 
+
+## Cracking Password Hashes
+
+Admin hash from passwd file was identified as Unix Md5 hash and cracked using the below command.
+
+Command on Kali VM: `hashcat -a 0 -m 500 admin.hash /usr/share/wordlists/rockyou.txt`
+ 
+Admin Password cracked as "1234" 
+
+![iamge](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/hash_cat_admin.png)
+
+Dropbear hash form dropbearpasswd file was identified as normal MD5 hash and cracked using the below command.
+
+Command on Kali VM: `hashcat -a 0 -m 0 dropbear.hash /usr/share/wordlists/rockyou.txt`
+
+Dropbear password was cracked "1234qwer" this was noted to be the password that was created for the admin login of the router via the browser. 
+
+The password file is being dynamically created on startup from the routers admin password. 
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/dropbear_hash.png)
 
 
 
