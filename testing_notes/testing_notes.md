@@ -37,7 +37,7 @@ Opened router case by removing two phillips screws and applying pressure between
 
 Noted three chips of interest on the PCB for further inspection (shown as details A, B, and C in picture below)
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/IMG-20230515-WA0013.jpg)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/router_areas_of_interest.jpg)
 
 ## On-board testing
 
