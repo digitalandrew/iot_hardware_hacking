@@ -781,5 +781,118 @@ Command: `/var/temp/_tools/busybox-mipsel netstat`
 
 ## Prompting Additional Console Log Messages
 
+Looking through the unprompted console log messages one repeating log message stood out:
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/util_execSystem.png)
+
+A repeated call by `[  util_execSystem  ]` this appears to be indicative of a log from a function in a shared object library. 
+
+It also appears to be an exec system call which is a c function that allows running of a system command. These can be dangerous in nature for command injection if the function uses user input. 
+
+These console log messages, especially those which allow tracing back to specific functions can allow for easier reverse engineering. To test this the wireless setup of the router was performed using the web portal. 
+
+Wireless Setup
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/wireless_setup.png)
+
+This triggered many console logs that showed use of the execSystem function for user supplied inputs. 
 
 
+```
+[ rsl_sendAppWlanCfg ] 1232:  Tell TMPD server that wlan/guest cfg has been c
+hanged.
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanBasicCfg cmd is "iwpriv ra0 set 
+CountryCode=US_NOCOUNTRY"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setCountryRegion cmd is "cp /etc/Single
+SKU_FCC.dat /var/Wireless/RT2860AP/SingleSKU.dat"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setCountryRegion cmd is "iwpriv ra0 set
+ CountryRegion=0"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanBasicCfg cmd is "iwpriv ra0 set 
+WirelessMode=9"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanBasicCfg cmd is "iwpriv ra0 set 
+HtBw=1"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanBasicCfg cmd is "iwpriv ra0 set 
+HtBssCoex=0"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanBasicCfg cmd is "iwpriv ra0 set AutoChannelSel=2"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanBasicCfg cmd is "iwpriv ra0 set Channel=0"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanBasicCfg cmd is "iwpriv ra0 set SSID='i''o''t''h''a''c''k''i''n''g'"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanAdvCfg cmd is "iwpriv ra0 set TxPower=100"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanAdvCfg cmd is "iwpriv ra0 set BeaconPeriod=100"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanAdvCfg cmd is "iwpriv ra0 set RTSThreshold=2346"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanAdvCfg cmd is "iwpriv ra0 set FragThreshold=2346"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanAdvCfg cmd is "iwpriv ra0 set DtimPeriod=1"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanAdvCfg cmd is "iwpriv ra0 set HtGi=1"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanAdvCfg cmd is "iwpriv ra0 set HideSSID=0"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanAdvCfg cmd is "iwpriv ra0 set WmmCapable=1"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setWlanAdvCfg cmd is "iwpriv ra0 set NoForwarding=0"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setSec cmd is "iwpriv ra0 set AuthMode=WPA2PSK"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setSec cmd is "iwpriv ra0 set EncrypType=AES"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setSec cmd is "iwpriv ra0 set IEEE8021X=0"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setSec cmd is "iwpriv ra0 set DefaultKeyID=2"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setSec cmd is "iwpriv ra0 set SSID='i''o''t''h''a''c''k''i''n''g'"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setSec cmd is "iwpriv ra0 set RekeyInterval=0"
+
+[ util_execSystem ] 141:  oal_wlan_ra_setSec cmd is "iwpriv ra0 set WPAPSK='1''2''3''4''5''q''w''e''r''t'"
+
+[ util_execSystem ] 141:  oal_wlan_ra_updateWlanCfg cmd is "iwpriv ra0 set AccessPolicy=0"
+
+[ util_execSystem ] 141:  oal_wlan_ra_updateWlanCfg cmd is "iwpriv ra0 set SSID='i''o''t''h''a''c''k''i''n''g'"
+
+[ util_execSystem ] 141:  oal_wlan_ra_updateWlanCfg cmd is "ifconfig ra1 down"
+
+[ util_execSystem ] 141:  oal_wlan_ra_updateWlanCfg cmd is "ifconfig ra0 down; "
+
+br0: port 1(ra0) entering forwarding state
+[ util_execSystem ] 141:  oal_wlan_ra_updateWlanCfg cmd is "ifconfig ra0 up; "
+
+[RTMPReadParametersHook:297]wifi read profile faild.
+efuse_probe: efuse = 10000012
+exec!
+spiflash_ioctl_read, Read from 0x003f0000 length 0x400, ret 0, retlen 0x400
+eeFlashId = 0x7628!
+tx or rx disable[f0000300][count=0]!!!
+tx or rx disable[f0000300][count=1]!!!
+tssi_1_target_pwr_g_band = 36
+[ ntp_start ] 504:  ntp connect failed, return.
+
+[APCheckBcnQHandler] check_point_num  5 == 4  ARB_SCR=[f0000001]
+br0: port 1(ra0) entering forwarding state
+br0: port 1(ra0) entering forwarding state
+[ util_execSystem ] 141:  oal_intf_setIntf cmd is "ifconfig br0 192.168.0.1 netmask 255.255.255.0 up"
+
+[ util_execSystem ] 141:  oal_util_setProcLanAddr cmd is "echo "br0 16820416," > /proc/net/conntract_LocalAddr"
+
+[ util_execSystem ] 141:  oal_sys_unsetTZ cmd is "echo "" > /etc/TZ"
+
+iptables: Bad rule (does a matching rule exist in that chain?).
+spiflash_ioctl_read, Read from 0x003e0000 length 0x10000, ret 0, retlen 0x10000
+.
+spiflash_ioctl_erase, erase to 0x003f0000 length 0x0, nerase done
+spiflash_ioctl_write, Write to 0x003e0000 length 0x10000, ret 0, retlen 0x10000
+```
+Primary investigation showed that some user validation was being performed on the inputs, notably the SSID and Password had their individuals characters escaped. 
+
+Further investigation to be performed by using the function names to trace back and reverse engineering the firmware. 
