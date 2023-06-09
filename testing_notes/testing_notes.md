@@ -631,7 +631,7 @@ start ntp_request
 [ util_execSystem ] 141:  oal_sys_unsetTZ cmd is "echo "" > /etc/TZ"
 ```
 
-Some key information of note from the boot logs were"
+Some key information of note from the boot logs were:
 
 **Bootloader:** 
 
@@ -650,6 +650,7 @@ Kernel Command Line: `Kernel command line: console=ttyS1,115200 root=/dev/mtdblo
 Shows the console being set to ttyS1 with baud rate 115200 (this is the console session we are connected to). Show the root file system as type squashfs which is a compressed read-only file system. Show the initilization bin is /sbin/init.
 
 Boot Partition Details:
+
 EN25Q32B(1c 30161c30) (4096 Kbytes)
 
 mtd .name = raspi, .size = 0x00400000 (4M) .erasesize = 0x00010000 (64K) .numeraseregions = 0
