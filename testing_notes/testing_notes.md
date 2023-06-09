@@ -703,7 +703,7 @@ Busybox is a popular binary used on embedded systems as it packages many common 
 
 Observing the available functions in busybox it was noted that this appears to be a stripped down version of Busybox, however TFTP was still available. 
 
-##Transferring Full Version of Busybox over TFTP
+## Transferring Full Version of Busybox over TFTP
 
 The full version of Busybox was downloaded from: https://busybox.net/downloads/binaries/
 
