@@ -690,6 +690,27 @@ Mutliple details about Dropbear initilization including the below line which als
 
 `[ util_execSystem ] 141:  prepareDropbear cmd is "dropbearkey -t rsa -f /var/tmp/dropbear/dropbear_rsa_host_key"`
 
+## Interupting Bootloader
+
+Through online research it was discovered that the bootloader interrupt command is "tpl". There is a very small window to interupt the bootloader so the easiest way to do it is to issue a reboot command and then immediately being typing "tpl" repeatedly. 
+
+Doing so interuppted the bootloader and provided access to the bootloaders Command Line Interface. 
+
+```
+
+switch BootType:
+   
+4: System Enter Boot Command Line Interface.
+
+U-Boot 1.1.3 (Feb  3 2021 - 10:10:08)
+MT7628 # help     
+Unknown command 'help' - try 'help'
+MT7628 #   
+
+```
+Usually this CLI provides access to tools to read and write to memory, set environment details and gather further information about the board. Unfortunately the repurposed version of U-Boot has removed this functionality. The only functionality remaining is to perform a TFTP boot. This can be done to boot from firmware over the network as a recovery method. 
+
+
 ## Enumeration via UART Shell
 
 Pressing Enter revealed there was shell access with no logon as root user:
