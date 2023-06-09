@@ -694,6 +694,14 @@ Mutliple details about Dropbear initilization including the below line which als
 
 Through online research it was discovered that the bootloader interrupt command is "tpl". There is a very small window to interupt the bootloader so the easiest way to do it is to issue a reboot command and then immediately being typing "tpl" repeatedly. 
 
+```
+~ # reboot
+The system is going down NOW!
+Sent SIGTERM to all processes
+Terminated
+Sent SIGKILL toRestarting system.
+```
+
 Doing so interuppted the bootloader and provided access to the bootloaders Command Line Interface. 
 
 ```
