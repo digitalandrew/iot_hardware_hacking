@@ -28,13 +28,13 @@
 
 ## Visual Inspection
 
-Inspected exterior of router, noted label on the back that contained FCC ID for further review. 
+Inspected exterior of the router, and noted label on the back that contained FCC ID for further review. 
 
 FCC ID: 2AXJ4WR841NV14
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/router_ffc_id.jpg)
 
-Opened router case by removing two phillips screws and applying pressure between pressure fit parts with spudger tool.
+Opened router case by removing two Phillips screws and applying pressure between pressure-fit parts with a spudger tool.
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/router_opened.jpg)
 
@@ -44,24 +44,24 @@ Noted three chips of interest on the PCB for further inspection (shown as detail
 
 ## On-board testing
 
-Noted presence of a test connection that appears to be a UART connection based on the 4 pins labelled with VCC, GND, RX and TX (shown as detail D above)
+Noted the presence of a test connection that appears to be a UART connection based on the 4 pins labelled with VCC, GND, RX and TX (shown as detail D above)
 
-Verified operating voltage of PCB is 9V by testing voltage drop across input jack with multimeter. 
+Verified operating voltage of the PCB is 9V by testing the voltage drop across the input jack with a multimeter. 
 
 Identified ground connection on P1 (detail E above) by testing continuity with the ground connection on the input jack.
 
 Tested the suspected UART connection with a multimeter to verify pins matched the silk screen labels, each was pin tested as follows:
 
 - VCC: Measured voltage drop between VCC and ground as 3.3V confirming operating voltage of UART at 3.3V
-- GND: Checked for continuity between GND pin on UART and known ground on board and confirmed GND is infact a ground. 
+- GND: Checked for continuity between GND pin on UART and known ground on board and confirmed GND is in fact a ground. 
 - RX: Measured voltage drop between RX and ground as 0V, test to ensure it was not connected to ground by checking continuity between RX and known ground connections, no continuity found
 - TX: Measured Voltage drop between RX and ground as ~3.3V during standard operation. 
 
-After confirming pinout, based on the observations of the pins this appears to be a UART connection, checked for transmission on TX pin during boot up by powercylcing router and measuring voltage drop. Noted fluctuation on TX pin from ~1V - 3V suggesting and busy and active transmission during bootup.
+After confirming pinout, based on the observations of the pins this appears to be a UART connection, checked for transmission on the TX pin during boot up by power cycling router and measuring voltage drop. Noted fluctuation on TX pin from ~1V - 3V suggests busy and active transmission during bootup.
 
-Soldered through hole inline header pins to suspected UART connection to facilitate further testing with logic analyzer and later on USB to Serial Adapter. 
+Soldered through hole inline header pins to suspected UART connection to facilitate further testing with a logic analyzer and later on USB to Serial Adapter. 
 
-Attached Logic Analyzer to TX and GND pins of UART connection and captured a transmission during boot up, screenshot of single tranmission frame shown below. 
+Attached Logic Analyzer to TX and GND pins of UART connection and captured a transmission during boot up, a screenshot of single transmission frame shown below. 
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/Uart_Capture_Single_Frame.png)
 
@@ -73,19 +73,19 @@ Based on these findings applied a UART decoder to the channel with the below set
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/uart_decoder_settings.png)
 
-Decoded UART signal confirmed UART parameters and showed presence of boot loader and boot up logs to be investigated further. 
+Decoded UART signal confirmed UART parameters and showed the presence of a boot loader and boot-up logs to be investigated further. 
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/uart_decoded_message.png)
 
 ## OSINT and Online Recon
 
-Used previously locataed FCC ID to find FCC Equipment Authorization filing for the router (https://fccid.io/2AXJ4WR841NV14)
+Used previously located FCC ID to find FCC Equipment Authorization filing for the router (https://fccid.io/2AXJ4WR841NV14)
 
-Noted in the filing that the ID had been changed from the previoous TE7WR841NV14. 
+Noted in the filing that the ID had been changed from the previous TE7WR841NV14. 
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ffc_id_change_request.png)
 
-Inspectng the previous filing (https://fccid.io/TE7WR841NV14) internal photos of the router were located. Unfortunately schematics, functional description and block diagram were redacted as confidential. 
+Inspecting the previous filing (https://fccid.io/TE7WR841NV14) internal photos of the router were located. Unfortunately, schematics, functional descriptions and block diagrams were redacted as confidential. 
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/fcc-id-1.png)
 
@@ -99,7 +99,7 @@ Previously denoted chip A Id'd as MEDIATEK MT7628NN
 
 Previously denoted chip B Id'd as Zentel A3S56D40GTP -50L
 
-Unfortunately the markers on chip C were not readable in the FCC pictures. Returning to the test router, high resolution pictures were taken and blown up to Id chip. 
+Unfortunately, the markers on chip C were not readable in the FCC pictures. Returning to the test router, high-resolution pictures were taken and blown up to Id chip. 
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/cfeon_chip_id.jpg)
 
@@ -107,7 +107,7 @@ Chip C was Id'd as cFeon QH32B-104HIP.
 
 Data sheets were located online for each of the chips. 
 
-**MEDIATEK MT7628NN:** System On Chip (SOC) containing CPU. Important details included that this is a purpose built SOC for N300 routers. The CPU is MIPS24KEc, supports Linux 2.6.36 SDK and Linux 3.10 SDK. Interfaces with flash memory via SPI.
+**MEDIATEK MT7628NN:** System On Chip (SOC) containing CPU. Important details included that this is a purpose-built SOC for N300 routers. The CPU is MIPS24KEc, which supports Linux 2.6.36 SDK and Linux 3.10 SDK. Interfaces with flash memory via SPI.
 
 Product Page: https://www.mediatek.com/products/home-networking/mt7628k-n-a
 
@@ -143,9 +143,9 @@ Port 80 - http hosting the routers configuration web portal
 
 Port 1900 - UPnP (Portable SDK for UPnP devices 1.6.19 (Linux 2.6.36))
 
-Noteable detail confirmed suspicion that router is running Linux kernel 2.6.36. 
+Notable detail confirmed the suspicion that the router is running Linux kernel 2.6.36. 
 
-UDP scans reveled 2 open ports: 
+UDP scans revealed 2 open ports: 
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/nmap_udp_scan.png)
 
@@ -172,7 +172,7 @@ Connected USB to UART adapter to the previously located UART pins based on the b
 
 Opened Terminal Session via Screen with the previously identified baud rate.
 
-After powering on the router the bootloader logging and linux initilization logging from init and init scripts was displayed over the serial console session:
+After powering on the router the bootloader logging and Linux initialization logging from init and init scripts were displayed over the serial console session:
 
 **Command**: `screen /dev/ttyUSB0 115200`
 
@@ -647,7 +647,7 @@ CPU Information:  `CPU revision is: 00019655 (MIPS 24Kc)`
 
 Kernel Command Line: `Kernel command line: console=ttyS1,115200 root=/dev/mtdblock2 rootfstype=squashfs init=/sbin/init`
 
-Shows the console being set to ttyS1 with baud rate 115200 (this is the console session we are connected to). Show the root file system as type squashfs which is a compressed read-only file system. Show the initilization bin is /sbin/init.
+Shows the console being set to ttyS1 with a baud rate of 115200 (this is the console session we are connected to). Show the root file system as type squashfs which is a compressed read-only file system. Show the initialization bin is /sbin/init.
 
 Boot Partition Details:
 
@@ -676,23 +676,23 @@ Shows the partition of the ROM.
 Initilization Script: 
 `starting pid 29, tty '': '/etc/init.d/rcS'`
 
-Shows the location of the initilization script. 
+Shows the location of the initialization script. 
 
 Configuration Files:
 
-Multiple configuration files listed for use during start up, the below appears to be a main configuration file.
+Multiple configuration files are listed for use during start-up, the below appears to be a main configuration file.
 
 `[ dm_readFile ] 2061:  can not open xml file /var/tmp/pc/reduced_data_model.xml!, about to open file /etc/reduced_data_model.xml`
 
 Dropbear: 
 
-Mutliple details about Dropbear initilization including the below line which also reveals what is most likely a writeable filepath. 
+Multiple details about Dropbear initialization including the below line also reveal what is most likely a writeable filepath. 
 
 `[ util_execSystem ] 141:  prepareDropbear cmd is "dropbearkey -t rsa -f /var/tmp/dropbear/dropbear_rsa_host_key"`
 
 ## Interupting Bootloader
 
-Through online research it was discovered that the bootloader interrupt command is "tpl". There is a very small window to interupt the bootloader so the easiest way to do it is to issue a reboot command and then immediately being typing "tpl" repeatedly. 
+Through online research, it was discovered that the bootloader interrupt command is "tpl". There is a very small window to interrupt the bootloader so the easiest way to do it is to issue a reboot command and then immediately being typing "tpl" repeatedly. 
 
 ```
 ~ # reboot
@@ -702,7 +702,7 @@ Terminated
 Sent SIGKILL toRestarting system.
 ```
 
-Doing so interuppted the bootloader and provided access to the bootloaders Command Line Interface. 
+Doing so interrupted the bootloader and provided access to the bootloaders Command Line Interface. 
 
 ```
 
@@ -716,22 +716,22 @@ Unknown command 'help' - try 'help'
 MT7628 #   
 
 ```
-Usually this CLI provides access to tools to read and write to memory, set environment details and gather further information about the board. Unfortunately the repurposed version of U-Boot has removed this functionality. The only functionality remaining is to perform a TFTP boot. This can be done to boot from firmware over the network as a recovery method. 
+Usually this CLI provides access to tools to read and write to memory, set environment details and gather further information about the board. Unfortunately, the repurposed version of U-Boot has removed this functionality. The only functionality remaining is to perform a TFTP boot. This can be done to boot from firmware over the network as a recovery method. 
 
 
 ## Enumeration via UART Shell
 
-Pressing Enter revealed there was shell access with no logon as root user:
+Pressing Enter revealed there was shell access with no login as root user:
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/initial_shell_access.png)
 
-Checking over the available binaries in the bin folder, busybox was discoverd: 
+Checking over the available binaries in the bin folder, busybox was discovered: 
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/busbox_bin_id.png)
 
 Busybox is a popular binary used on embedded systems as it packages many common Linux/Unix binaries into one smaller package. 
 
-Observing the available functions in busybox it was noted that this appears to be a stripped down version of Busybox, however TFTP was still available. 
+Observing the available functions in busybox it was noted that this appears to be a stripped-down version of Busybox, however, TFTP was still available. 
 
 ## Transferring Full Version of Busybox over TFTP
 
@@ -745,11 +745,11 @@ Created a folder to transfer over tools in `/var/tmp/_tools` /var was previously
 
 Command from Router to initiate file transfer: `tftp -r busybox-mipsel -g 192.168.0.100`
 
-The full version of busybox was then available to user for further enumeration. 
+The full version of busybox was then available to use for further enumeration. 
 
 ## Enumerating /var folder
 
-Using the new full version of Busybox grep was utilized to search for file with "pass" in it in order to identify possible hardcoded passwords. 
+Using the new full version of Busybox grep was utilized to search for files with "pass" in it in order to identify possible hardcoded passwords. 
 
 Command: `/var/temp/_tools/busybox-mipsel grep -r 'pass' .`
 
@@ -789,7 +789,7 @@ Command on Kali VM: `hashcat -a 0 -m 0 dropbear.hash /usr/share/wordlists/rockyo
 
 Dropbear password was cracked "1234qwer" this was noted to be the password that was created for the admin login of the router via the browser. 
 
-The password file is being dynamically created on startup from the routers admin password. 
+The password file is dynamically created on startup from the router's admin password. 
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/dropbear_hash.png)
 
@@ -801,7 +801,7 @@ Command: `/var/temp/_tools/busybox-mipsel ps`
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ps.png)
 
-Noted that all process were running as the admin user and there was no principal of least priveledge being followed. 
+Noted that all processes were running as the admin user and there was no principle of least privilege being followed. 
 
 The same process was followed to check running processes using netstat
 
@@ -815,16 +815,16 @@ Looking through the unprompted console log messages one repeating log message st
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/util_execSystem.png)
 
-A repeated call by `[  util_execSystem  ]` this appears to be indicative of a log from a function in a shared object library. 
+A repeated call by `[  util_execSystem  ]` appears to be indicative of a log from a function in a shared object library. 
 
-It also appears to be an exec system call which is a c function that allows running of a system command. These can be dangerous in nature for command injection if the function uses user input. 
+It also appears to be a system call which is a c function that allows the running of a system command. These can be dangerous in nature for command injection if the function uses user input. 
 
 These console log messages, especially those which allow tracing back to specific functions can allow for easier reverse engineering. To test this the wireless setup of the router was performed using the web portal. 
 
 Wireless Setup
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/wireless_setup.png)
 
-This triggered many console logs that showed use of the execSystem function for user supplied inputs. 
+This triggered many console logs that showed the use of the execSystem function for user-supplied inputs. 
 
 
 ```
@@ -923,6 +923,8 @@ spiflash_ioctl_read, Read from 0x003e0000 length 0x10000, ret 0, retlen 0x10000
 spiflash_ioctl_erase, erase to 0x003f0000 length 0x0, nerase done
 spiflash_ioctl_write, Write to 0x003e0000 length 0x10000, ret 0, retlen 0x10000
 ```
-Primary investigation showed that some user validation was being performed on the inputs, notably the SSID and Password had their individuals characters escaped. 
+Primary investigation showed that some user validation was being performed on the inputs, notably the SSID and Password had their individual characters escaped. 
 
 Further investigation to be performed by using the function names to trace back and reverse engineering the firmware. 
+
+
