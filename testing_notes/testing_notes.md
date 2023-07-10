@@ -17,11 +17,14 @@
 
 **USB to UART Adapter:** Silicon Labs CP210x UART Bridge
 
+**Flash ROM Programmer:** 
+
 **Software:** 
 - Sigrok Pulsview (for logic captures)
 - NMAP
 - Firefox
 - Screen
+- Flashrom
 
 
 # Initial Recon
@@ -38,7 +41,7 @@ Opened router case by removing two Phillips screws and applying pressure between
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/router_opened.jpg)
 
-Noted three chips of interest on the PCB for further inspection (shown as details A, B, and C in picture below)
+Noted three chips of interest on the PCB for further inspection (shown as details A, B, and C in the picture below)
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/router_areas_of_interest.jpg)
 
@@ -926,5 +929,16 @@ spiflash_ioctl_write, Write to 0x003e0000 length 0x10000, ret 0, retlen 0x10000
 Primary investigation showed that some user validation was being performed on the inputs, notably the SSID and Password had their individual characters escaped. 
 
 Further investigation to be performed by using the function names to trace back and reverse engineering the firmware. 
+
+# Firmware Extraction and Analysis
+
+## Firmware Extraction from onboard ROM
+
+From the previous recon, it was confirmed that the flash ROM on the board (EN25Q32B-104HIP) was using SPI to communicate with the processor, to confirm this a logic analyzer was attached to the pins of the ROM using test clips. 
+
+The initial boot process was captured as this process would contain many reads from the processor to the flash ROM. The logic analyzer confirmed the SPI function of the flash ROM matched that of the datasheet. 
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/SPI_capture.png)
+
 
 
