@@ -27,6 +27,8 @@
 - Flashrom
 - Binwalk
 - DD (Data Duplicater)
+- Openssl
+- Cyberchef
 
 
 # Initial Recon
