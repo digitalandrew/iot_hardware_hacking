@@ -992,7 +992,7 @@ Strings was then used to identify any binaries or shared object files that had t
 
 This revealed that the libcmm.so shared object file had both the xml file names as strings in it. 
 
-![image] (https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/strings_xml_files.png)
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/strings_xml_files.png)
 
 
 # Reverse Engineering
