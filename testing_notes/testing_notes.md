@@ -982,7 +982,7 @@ As binwalk was not able to automatically extract the bootloader it was extracted
 
 `dd if=tp_link_ext.bin bs=1 skip=53536 count=12512 of=u_boot.bin`
 
-After extracting the root file system the contents of it were enumerated which revealed multiple binaries and shared object files that may be of interest to reverse engineer. In addition, two config files called #default_config.xml# and #reduced_data_model.xml# were located however these config files appear to be encrypted. 
+After extracting the root file system the contents of it were enumerated which revealed multiple binaries and shared object files that may be of interest to reverse engineer. In addition, two config files called # default_config.xml # and # reduced_data_model.xml # were located however these config files appear to be encrypted. 
 
 
 
