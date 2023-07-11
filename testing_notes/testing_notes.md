@@ -950,6 +950,8 @@ The firmware was then extracted from the ROM using flashrom and the following co
 
 `flashrom -p ch341a_spi -r tp_link_wr841n_ext.bin`
 
+## Firmware Analysis
+
 To confirm the firmware extraction was successful an initial analysis was performed on it using binwalk with the following command:
 
 `binwalk tp_link_wr841n_ext.bin`
@@ -982,7 +984,19 @@ As binwalk was not able to automatically extract the bootloader it was extracted
 
 `dd if=tp_link_ext.bin bs=1 skip=53536 count=12512 of=u_boot.bin`
 
-After extracting the root file system the contents of it were enumerated which revealed multiple binaries and shared object files that may be of interest to reverse engineer. In addition, two config files called  *default_config.xml and  *reduced_data_model.xml # were located however these config files appear to be encrypted. 
+After extracting the root file system the contents of it were enumerated which revealed multiple binaries and shared object files that may be of interest to reverse engineer. In addition, two config files called  *default_config.xml* and  *reduced_data_model.xml* were located however these config files appear to be encrypted. 
+
+Strings was then used to identify any binaries or shared object files that had the above xml file names as strings in them to identify which files to reverse engineer in an attempt to decrypt them. 
+
+`strings -f * | grep ".xml"
+
+This revealed that the libcmm.so shared object file had both the xml file names as strings in it. 
+
+![image] (https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/strings_xml_files.png)
+
+
+# Reverse Engineering
+
 
 
 
