@@ -17,7 +17,7 @@
 
 **USB to UART Adapter:** Silicon Labs CP210x UART Bridge
 
-**Flash ROM Programmer:** 
+**Flash ROM Programmer:** CH341a USB EPROM Programmer
 
 **Software:** 
 - Sigrok Pulsview (for logic captures)
@@ -25,6 +25,8 @@
 - Firefox
 - Screen
 - Flashrom
+- Binwalk
+- DD (Data Duplicater)
 
 
 # Initial Recon
@@ -806,7 +808,7 @@ Command: `/var/temp/_tools/busybox-mipsel ps`
 
 Noted that all processes were running as the admin user and there was no principle of least privilege being followed. 
 
-The same process was followed to check running processes using netstat
+The same process was followed to check running processes using netstat.
 
 Command: `/var/temp/_tools/busybox-mipsel netstat` 
 
@@ -936,9 +938,51 @@ Further investigation to be performed by using the function names to trace back 
 
 From the previous recon, it was confirmed that the flash ROM on the board (EN25Q32B-104HIP) was using SPI to communicate with the processor, to confirm this a logic analyzer was attached to the pins of the ROM using test clips. 
 
-The initial boot process was captured as this process would contain many reads from the processor to the flash ROM. The logic analyzer confirmed the SPI function of the flash ROM matched that of the datasheet. 
+The initial boot process was captured as this process contains many reads from the processor to the flash ROM. The logic analyzer confirmed the SPI function of the flash ROM matched that of the datasheet. 
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/SPI_capture.png)
+
+After confirming the SPI flash functioned as expected a ch341a flash programmer was connected to the flash ROM as per the data sheet pinout in order to read the entire contents of the flash ROM. 
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ch341a_programmer_setup.jpg)
+
+The firmware was then extracted from the ROM using flashrom and the following command:
+
+`flashrom -p ch341a_spi -r tp_link_wr841n_ext.bin`
+
+To confirm the firmware extraction was successful an initial analysis was performed on it using binwalk with the following command:
+
+`binwalk tp_link_wr841n_ext.bin`
+
+The initial analysis by binwalk showed that the extraction appeared to be successful as it was able to pickout three partitions on the firwmare that very closely matched the partition table that was previously observed during bootup. 
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/binwalk_init_analysis.png)
+
+As an additional confirmation, the entropy of the file was analyzed using binwalk. 
+
+`binwalk -E tp_link_wr841n_ext.bin`
+
+The entropy confirmed the layout of the firmware matched what was expected on the ROM. The first partition was clearly the unencrypted/uncompressed bootloader as the entropy was floating around 0.5. 
+
+The second partition matched the starting address location and length of the kernel. The entropy being around a solid 1 confirms that it is LZMA compressed as was shown by binwalk.
+
+The third partition also matched the starting address location and length of the root file system, in addition the entropy shows that it is in fact compressed as well. 
+
+An additional partition or section of data is visible in the entropy analysis that binwalk was not able to identify previously, this most likely indicates an encrypted section. 
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/binwalk_entropy.png)
+
+Binwalk was then used to automatically extract the contents of the firmware. 
+
+`binwalk -e tp_link_wr841n_ext.bin`
+
+The automatic extraction by binwalk was able to carve out the LZMA compressed kernel and squashfs filesystem and then automatically decompress both of the files. 
+
+As binwalk was not able to automatically extract the bootloader it was extracted manually using dd. 
+
+`dd if=tp_link_ext.bin bs=1 skip=53536 count=12512 of=u_boot.bin`
+
+
 
 
 
