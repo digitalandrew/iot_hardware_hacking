@@ -990,7 +990,7 @@ After extracting the root file system the contents of it were enumerated which r
 
 Strings was then used to identify any binaries or shared object files that had the above xml file names as strings in them to identify which files to reverse engineer in an attempt to decrypt them. 
 
-`strings -f * | grep ".xml"
+`strings -f * | grep ".xml"`
 
 This revealed that the libcmm.so shared object file had both the xml file names as strings in it. 
 
@@ -998,6 +998,70 @@ This revealed that the libcmm.so shared object file had both the xml file names 
 
 
 # Reverse Engineering
+
+## Locating Decryption Algorithm and Key
+
+The libcmm.so was loaded in Ghidra and decompiled in an attempt to reverse engineer the encryption/decryption of the xml files. 
+
+Running a search for "decrypt" in Ghidra revealed a function called "dm_decryptFile" that was then investigated further. 
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ghidra_decrypt_search.png)
+
+Upon initial inspection of the decompiled, based on the error messaging this appeared to be the correct function to decrypt the config files. 
+
+Some variables were renamed based on guesses of their function based on the decompiled code. 
+
+```
+int dm_decryptFile(uint dm_file_size,undefined4 param_2,uint dec_buf_size,int param_4)
+
+{
+  int iVar1;
+  int iVar2;
+  char enc_key [8];
+  
+  memcpy(enc_key,&DAT_000c9f70,8);
+  if (dec_buf_size < dm_file_size) {
+    cdbg_printf(8,"dm_decryptFile",0xbcf,
+                "Buffer exceeded, decrypt buf size is %u, but dm file size is %u",dec_buf_size,
+                dm_file_size);
+    iVar2 = 0;
+  }
+  else {
+    iVar2 = cen_desMinDo(param_2,dm_file_size,param_4,dec_buf_size,enc_key,0);
+    iVar1 = iVar2;
+    if (iVar2 == 0) {
+      cdbg_printf(8,"dm_decryptFile",0xbd6,"DES decrypt error\n");
+    }
+    else {
+      do {
+        iVar2 = iVar1;
+        if (((undefined *)(param_4 + iVar2))[-1] != '\0') break;
+        iVar1 = iVar2 + -1;
+      } while (iVar2 != 0);
+      *(undefined *)(param_4 + iVar2) = 0;
+    }
+  }
+  return iVar2;
+
+```
+
+Reverse engineering of the function revealed that based on the error messaging and the cen_desMinDo() function the encryption algorithm appears to be DES. Further research on the DES algorithm reveals that it uses 64-bit (8 x 8 bytes) keys. An array of 8 chars was noted to be created at the start of the function and then memcpy is later used to copy 8 bytes into it from a data location in the .data section of the shared object file. Inspecting the data location revealed what appears to be the DES encryption key. As DES is a symmetric encryption algorithm it can also be used for decryption. 
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ghidra_des_enc_key.png)
+
+**DES Encryption Key:** 478DA50FF9E3D2CB
+
+The *default_config.xml* file was then decrypted using OpenSSL and the above key. 
+
+`openssl enc -d -des-ecb -K 478DA50FF9E3D2CB -nopad -in default_config.xml
+
+Unfortunately, this config file did not contain any notable details. 
+
+The *reduced_data_model.xml* config file was then decrypted making use of Cyberchef (https://cyberchef.io/).
+
+It also did not contain any notable details but confirmed that it was using the same encryption key and scheme as the previous xml file. 
+
+## Checking for command injection
 
 
 
