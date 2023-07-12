@@ -1053,7 +1053,7 @@ Reverse engineering of the function revealed that based on the error messaging a
 
 The *default_config.xml* file was then decrypted using OpenSSL and the above key. 
 
-`openssl enc -d -des-ecb -K 478DA50FF9E3D2CB -nopad -in default_config.xml
+`openssl enc -d -des-ecb -K 478DA50FF9E3D2CB -nopad -in default_config.xml`
 
 Unfortunately, this config file did not contain any notable details. 
 
@@ -1062,6 +1062,287 @@ The *reduced_data_model.xml* config file was then decrypted making use of Cyberc
 It also did not contain any notable details but confirmed that it was using the same encryption key and scheme as the previous xml file. 
 
 ## Checking for command injection
+
+Based on the previous testing performed on the web portal and reviewing the console logging in UART it appears that some of the functions of the router are being performed by making system calls to execute bash commands. More specifically it appears that some of these system calls are being passed user supplied inputs from the web portal. 
+
+Initial recon showed that some of the user supplied inputs were at a minimum being escaped as individual characters to prevent command injection, however use of system calls on user supplied inputs can lead to command injection. 
+
+The util_execSystem function which appeared to be the one performing the system calls was located to be part of the libcmm.so shared object file by using strings to search for it through the binaries and other shared object files. 
+
+`strings -f * | grep "util_execSystem"`
+
+The util_execSystem function was then found via a program text search in Ghidra using the previously decompiled  libcmm.so that was investigated above. 
+
+```
+int util_execSystem(int cmd_id,char *unformat_string,undefined4 str_format_var_1,
+                   undefined4 str_format_var_2)
+
+{
+  char *pcVar1;
+  __pid_t _Var2;
+  uint uVar3;
+  undefined4 uVar4;
+  int iVar5;
+  int iVar6;
+  undefined4 va_ptr_format_var;
+  undefined4 va_end_format_var;
+  uint local_234;
+  char cmd_string [512];
+  int local_30;
+  char *cmd_string_ptr;
+  
+  cmd_string_ptr = cmd_string;
+  local_234 = 0;
+  va_ptr_format_var = str_format_var_1;
+  va_end_format_var = str_format_var_2;
+  memset(cmd_string_ptr,0,0x200);
+  local_30 = vsnprintf(cmd_string_ptr,0x1ff,unformat_string,&va_ptr_format_var);
+  cdbg_printf(8,"util_execSystem",0xb9,"%s cmd is \"%s\"\n",cmd_id,cmd_string_ptr);
+  iVar5 = 1;
+  if (0 < local_30) {
+    while( true ) {
+      local_234 = system(cmd_string);
+      uVar3 = local_234 & 0x7f;
+      if ((int)local_234 < 0) {
+        if (local_234 == 0xffffffff) {
+          cdbg_printf(8,"util_execSystem",0xcd,"system fork failed.",cmd_id,cmd_string_ptr);
+        }
+        else {
+          perror("util_execSystem call error:");
+        }
+      }
+      else if (uVar3 == 0) {
+        iVar6 = (int)(local_234 & 0xff00) >> 8;
+        if (iVar6 == 0) {
+          return 0;
+        }
+        if (iVar6 != 4) {
+          return iVar6;
+        }
+        pcVar1 = strstr(cmd_string,"iptable");
+        if (pcVar1 == (char *)0x0) {
+          return 4;
+        }
+        sleep(1);
+      }
+      else {
+        if ((int)((uVar3 + 1) * 0x1000000) >> 0x19 < 1) {
+          if ((local_234 & 0xff) == 0x7f) {
+            uVar4 = 0xe6;
+            pcVar1 = "process stopped, signal number = %d\n";
+            uVar3 = (int)(local_234 & 0xff00) >> 8;
+          }
+          else {
+            uVar4 = 0xe8;
+            pcVar1 = "Oh,no possible here. status = %d\n";
+            uVar3 = local_234;
+          }
+        }
+        else {
+          uVar4 = 0xe4;
+          pcVar1 = "abnormal termination, signal number = %d\n";
+        }
+        cdbg_printf(8,"util_execSystem",uVar4,pcVar1,uVar3,cmd_string_ptr);
+        while (_Var2 = waitpid(-1,(int *)&local_234,1), 0 < _Var2) {
+          cdbg_printf(8,"util_execSystem",0xee,"get a zombie process %d",_Var2);
+        }
+      }
+      if (iVar5 == 3) break;
+      cmd_id = iVar5;
+      cdbg_printf(8,"util_execSystem",199,"system execute again, and %d times",iVar5);
+      iVar5 = iVar5 + 1;
+    }
+  }
+  return -1;
+}
+```
+Review of the decompiled source code revealed that the function was in fact making system calls. The only formatting being performed on the inputs to the function which were passed to the system call was to format the specified arguments into the command string using the vsnprintf function. No further validation appeared to be performed in the util_execSystem function on the string created which would then be passed into the system call. This finding demonstrates that all validation or checking of user inputs for things like command injection characters or escaping characters must be done by what ever calls the util_execSystem. 
+
+Previously the Wireless Setup was run and the user specified SSID and PSK were passed onto the util_execSystem however the debugging messages shown in the UART console logs showed that the user speicifed values had each individual character escaped by single quotation marks. This is done to prevent command injection as any characters such as ";" or "&" will only be interpretted as a string and not as part of the command. 
+
+Further investigation was done to see how this escaping was performed. In order to locate the file or binary that was making the specific util_execSystem call that was printing the debug message seen earlier strings and grep was used to search for words in the string (keeping in mind the formatting of the input string performed by the util_execSystem function itself. The string used that matched the formatting previously seen in the util_execSystem function was found again in the libcmm.so shared object. 
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/iwpriv_strings_grep.png)
+
+Searching for the string making use of the strings search in Ghidra led to the function that appeared to be calling util_execSystem to update the SSID when the wireless setup was being performed in the previous test. 
+
+![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ghidra_iwpriv_reference.png)
+
+The string had 9 references to it in the rest of the libcmm.so, following the first external reference luckily led to the correct function that was performing the util_execSystem call from the previous wireless setup test. Unfortunately this function had it's label (name) removed in the compilation process and as such Ghidra added the generic FUN_XXXX label to it. 
+
+```
+int FUN_000aa1e8(int param_1,undefined4 param_2,char *param_3,int param_4,undefined4 unsan_ssid)
+
+{
+  int iVar1;
+  undefined4 uVar2;
+  char *pcVar3;
+  int local_1c0;
+  int local_1bc;
+  char acStack_1b8 [12];
+  char acStack_1ac [20];
+  undefined auStack_198 [32];
+  undefined auStack_178 [32];
+  undefined SSID [100];
+  undefined auStack_f4 [196];
+  char *local_30;
+  
+  local_1bc = 1;
+  local_1c0 = 1;
+  cstr_strncpy(auStack_178,&DAT_000c1e4c,0xc);
+  cstr_strncpy(auStack_198,&DAT_000c302c,4);
+  iVar1 = oal_wlan_getSecMode(param_1,&local_1bc,&local_1c0);
+  if (iVar1 == 0) {
+    if (local_1bc - 1U < 0xb) {
+                    /* WARNING: Could not find normalized switch variable to match jumptable */
+                    /* WARNING: This code block may not be properly labeled as switch case */
+      strcpy(acStack_1ac,"OPEN");
+    }
+    uVar2 = 2;
+    if (local_1c0 - 1U < 5) {
+                    /* WARNING: Could not find normalized switch variable to match jumptable */
+                    /* WARNING: This code block may not be properly labeled as switch case */
+      uVar2 = 2;
+      strcpy(acStack_1b8,"NONE");
+    }
+    else if (local_1c0 == 2) {
+      uVar2 = *(undefined4 *)(param_1 + 0x17c);
+    }
+    iVar1 = strcmp("Up",param_3);
+    if (iVar1 != 0) {
+      return 0;
+    }
+    util_execSystem("oal_wlan_ra_setSec","iwpriv %s set AuthMode=%s",param_2,acStack_1ac);
+    util_execSystem("oal_wlan_ra_setSec","iwpriv %s set EncrypType=%s",param_2,acStack_1b8);
+    util_execSystem("oal_wlan_ra_setSec","iwpriv %s set IEEE8021X=0",param_2);
+    if (local_1c0 == 2) {
+      if (*(char *)(param_1 + 0x180) != '\0') {
+        FUN_000aa13c(auStack_f4,param_1 + 0x180);
+        util_execSystem("oal_wlan_ra_setSec","iwpriv %s set Key1=%s",param_2,auStack_f4);
+      }
+      if (*(char *)(param_1 + 0x210) != '\0') {
+        FUN_000aa13c(auStack_f4,param_1 + 0x210);
+        util_execSystem("oal_wlan_ra_setSec","iwpriv %s set Key2=%s",param_2,auStack_f4);
+      }
+      if (*(char *)(param_1 + 0x2a0) != '\0') {
+        FUN_000aa13c(auStack_f4,param_1 + 0x2a0);
+        util_execSystem("oal_wlan_ra_setSec","iwpriv %s set Key3=%s",param_2,auStack_f4);
+      }
+      if (*(char *)(param_1 + 0x330) != '\0') {
+        FUN_000aa13c(auStack_f4,param_1 + 0x330);
+        util_execSystem("oal_wlan_ra_setSec","iwpriv %s set Key4=%s",param_2,auStack_f4);
+      }
+    }
+    util_execSystem("oal_wlan_ra_setSec","iwpriv %s set DefaultKeyID=%d",param_2,uVar2);
+    if (local_1c0 - 1U < 2) {
+      return 0;
+    }
+    FUN_000aa13c(SSID,unsan_ssid);
+    util_execSystem("oal_wlan_ra_setSec","iwpriv %s set SSID=%s",param_2,SSID);
+    util_execSystem("oal_wlan_ra_setSec","iwpriv %s set RekeyInterval=%d",param_2,
+                    *(undefined4 *)(param_1 + 0xf0));
+    if ((((local_1bc - 6U < 2) || (local_1bc == 9)) || (local_1bc == 10)) || (local_1bc == 0xb)) {
+      FUN_000aa13c(auStack_f4,param_1 + 0xae);
+      util_execSystem("oal_wlan_ra_setSec","iwpriv %s set WPAPSK=%s",param_2,auStack_f4);
+      return 0;
+    }
+    iVar1 = oal_wlan_getBrNamebyIfName(param_4,param_4,auStack_198);
+    if (iVar1 == 0) {
+      iVar1 = oal_wlan_getIfAddr(auStack_198,auStack_178);
+      if (iVar1 == 0) {
+        local_30 = "bObj";
+        iVar1 = strcmp("2.4GHz",(char *)(param_4 + 1099));
+        if (iVar1 == 0) {
+          pcVar3 = "killall -q  -SIGINT rt2860apd";
+        }
+        else {
+          pcVar3 = "killall -q  -SIGINT rtinicapd";
+        }
+        util_execSystem("oal_wlan_ra_setSec",pcVar3);
+        util_execSystem("oal_wlan_ra_setSec","iwpriv %s set IEEE8021X=0",param_2);
+        util_execSystem("oal_wlan_ra_setSec","iwpriv %s set SSID=%s",param_2,SSID);
+        util_execSystem("oal_wlan_ra_setSec","iwpriv %s set RADIUS_Server=%s",param_2,param_1 + 0xf4
+                       );
+        util_execSystem("oal_wlan_ra_setSec","iwpriv %s set RADIUS_Port=%d",param_2,
+                        *(undefined4 *)(param_1 + 0x134));
+        FUN_000aa13c(auStack_f4,param_1 + 0x138);
+        util_execSystem("oal_wlan_ra_setSec","iwpriv %s set RADIUS_Key=%s",param_2,auStack_f4);
+        util_execSystem("oal_wlan_ra_setSec","iwpriv %s set EAPifname=%s",param_2,auStack_198);
+        util_execSystem("oal_wlan_ra_setSec","iwpriv %s set own_ip_addr=%s",param_2,auStack_178);
+        util_execSystem("oal_wlan_ra_setSec","iwpriv %s set SSID=%s",param_2,SSID);
+        sleep(4);
+        iVar1 = strcmp("2.4GHz",(char *)(param_4 + 1099));
+        if (iVar1 == 0) {
+          pcVar3 = "rt2860apd &";
+        }
+        else {
+          pcVar3 = "rtinicapd &";
+        }
+        util_execSystem("oal_wlan_ra_setSec",pcVar3);
+        return 0;
+      }
+      uVar2 = 0xbb2;
+    }
+    else {
+      uVar2 = 0xbad;
+    }
+  }
+  else {
+    uVar2 = 0xb10;
+  }
+  cdbg_perror("oal_wlan_ra_setSec",uVar2,iVar1);
+  return iVar1;
+}
+
+```
+
+The util_execSystem function call in reference was located using the specific formatting string "iwpriv %s set SSID=%s" that previously found. 
+
+The parameters being passed into the function lined up with what was expected from the investigation of the util_execSystem function. The last parameter was cleary the SSID, searching through the rest of the function for more references to the SSID variable showed that above the util_execSystem call in question another function "FUN_000aa13c" was called and passed the SSID variable. 
+
+Following the function in libcmm.so showed that the function was responsible for performing the character escaping on the SSID. 
+
+```
+
+void FUN_000aa13c(int param_1,char *param_2)
+
+{
+  char cVar1;
+  size_t sVar2;
+  undefined *puVar3;
+  int iVar4;
+  int iVar5;
+  
+  sVar2 = strlen(param_2);
+  iVar4 = 0;
+  for (iVar5 = 0; puVar3 = (undefined *)(param_1 + iVar4), iVar5 < (int)sVar2; iVar5 = iVar5 + 1) {
+    if (*param_2 == '\'') {
+      *puVar3 = 0x5c;
+      iVar4 = iVar4 + 2;
+      puVar3[1] = *param_2;
+    }
+    else {
+      *puVar3 = 0x27;
+      cVar1 = *param_2;
+      iVar4 = iVar4 + 3;
+      puVar3[2] = 0x27;
+      puVar3[1] = cVar1;
+    }
+    param_2 = param_2 + 1;
+  }
+  *puVar3 = 0;
+  return;
+}
+
+```
+Review of the function indicated that it iterated over the unsanitized SSID and performed individual character espacing by first checking if the character was already a single quote and if it was adding the c escape character "\" infront of it. It then padded each individual character by shifting a single quotation "'" infront of and behind each character. 
+
+This function was also called prior to the util_execSystem call that used the PSK specified by the user. 
+
+The character escaping appears to be properly implemented so this specific call of the util_execSystem does not appear vulnerable to command injection, however Ghidra noted that there are 510 references to the function inside the libcmm.so file. Upon initial inspection many of these appear to be other functions that are calling util_execSystem. These functions should be reviewed to check if there is anyway to pass unsatized user inputs into the util_execSystem function. 
+
+
+
 
 
 
