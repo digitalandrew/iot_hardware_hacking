@@ -27,6 +27,7 @@
 - Flashrom
 - Binwalk
 - DD (Data Duplicater)
+- Ghidra
 - Openssl
 - Cyberchef
 
