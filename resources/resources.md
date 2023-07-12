@@ -8,6 +8,6 @@
 
 ## CTF Challenge Download Links
 
-** Broken Transmission:** [Link](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/CTF+Challenges/broken_transmission.zip)
+**Broken Transmission:** [Link](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/CTF+Challenges/broken_transmission.zip)
 
-** Beep_beep_beeeeeeep:** [Link](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/CTF+Challenges/beep_beep_beeeeeeep.zip)
+**Beep_beep_beeeeeeep:** [Link](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/CTF+Challenges/beep_beep_beeeeeeep.zip)
