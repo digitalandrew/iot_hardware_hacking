@@ -13,9 +13,9 @@ I have selected these tools as the best balance of affordability and quality tha
 
 None of the links provided are affiliate links and I make no commission of of their sales. 
 
-## Required:
+# Required:
 
-### Practice Target: TP-Link WR841n Wireless Router
+## Practice Target: TP-Link WR841n Wireless Router
 
 **Where is this used:** The router is used throughout almost the entire course as the practice target that we will be using for practicing taking measurements, sniffing communications and extracting firmware. 
 
@@ -27,7 +27,7 @@ Link 1: https://www.tp-link.com/us/where-to-buy/
 
 Link 2: https://www.amazon.com/TP-Link-N300-Wireless-Wi-Fi-Router-TL-WR841N/dp/B001FWYGJS
 
-### UART to USB Adapter: CP2102 TTL USB to UART Adapter
+## UART to USB Adapter: CP2102 TTL USB to UART Adapter
 
 **Where this is used:** This tool is used to interface with the UART pins on the router and establish a serial shell connection. 
 
@@ -45,7 +45,7 @@ Link 3: https://www.amazon.com/CP2102-Serial-Adapter-Converter-Module/dp/B08ZS6H
 
 Link 4: https://www.aliexpress.com/item/1005003536455256.html
 
-### Male through-hole header pins
+## Male through-hole header pins
 
 **Where this is used:** These are used to enable a connection to the UART pins on the router. The router PCB has bare through-hole pads exposed for UART and in order to interface with them with the other tools we need to attach these header pins. A solderless option using these pins is demonstrated in the course. 
 
@@ -61,7 +61,7 @@ Link 2: https://www.digikey.com/en/products/detail/w%C3%BCrth-elektronik/6130031
 
 Link 3: https://www.mouser.com/ProductDetail/Chip-Quik/HDR100IMP40M-G-V-TH?qs=Wj%2FVkw3K%252BMBASWNGaQOKpg%3D%3D
 
-### Digital Multimeter: AstroAI AM33D Multimeter 2000 Counts Digital Multimeter
+## Digital Multimeter: AstroAI AM33D Multimeter 2000 Counts Digital Multimeter
 
 **Where this is used:** The multimeter is used throughout the course for testing and verification, in addition, most of section 2 of the course is dedicated to teaching how to use a multimeter and its various functions. 
 
@@ -73,7 +73,7 @@ Link 1: https://www.amazon.com/AstroAI-Digital-Multimeter-Voltage-Tester/dp/B01I
 
 Link 2: https://www.astroai.com/digital-multimeter-2000-counts-am33d/ap/100071
 
-### Logic Analyzer: Comidox USB Logic Analyzer
+## Logic Analyzer: Comidox USB Logic Analyzer
 
 **Where this is used:** The logic analyzer is used to sniff and capture both UART and SPI communications taking place on the router PCB. 
 
@@ -89,7 +89,7 @@ Link 2: https://www.aliexpress.com/item/1005003375736481.html
 
 Link 3: https://www.amazon.com/HiLetgo-Analyzer-Ferrite-Channel-Arduino/dp/B077LSG5P2
 
-### Flash ROM Programmer: ch341a USB Programmer
+## Flash ROM Programmer: ch341a USB Programmer
 
 **Where this is used:** The flash ROM programmer is used to extract the firmware from the device. 
 
@@ -105,9 +105,9 @@ Link 2: https://www.amazon.com/Geekstory-CH341A-EEPROM-Programmer-Module/dp/B098
 
 Link 3: https://www.aliexpress.com/item/32793476447.html
 
-## Optional:
+# Optional:
 
-### Soldering Station: Weller WLC100
+## Soldering Station: Weller WLC100
 
 Link: https://www.amazon.com/Weller-Digital-Soldering-Station-WLC100/dp/B000AS28UC
 
