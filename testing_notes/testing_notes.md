@@ -1156,11 +1156,11 @@ int util_execSystem(int cmd_id,char *unformat_string,undefined4 str_format_var_1
   return -1;
 }
 ```
-Review of the decompiled source code revealed that the function was in fact making system calls. The only formatting being performed on the inputs to the function which were passed to the system call was to format the specified arguments into the command string using the vsnprintf function. No further validation appeared to be performed in the util_execSystem function on the string created which would then be passed into the system call. This finding demonstrates that all validation or checking of user inputs for things like command injection characters or escaping characters must be done by what ever calls the util_execSystem. 
+A review of the decompiled source code revealed that the function was in fact making system calls. The only formatting being performed on the inputs to the function which were passed to the system call was to format the specified arguments into the command string using the vsnprintf function. No further validation appeared to be performed in the util_execSystem function on the string created which would then be passed into the system call. This finding demonstrates that all validation or checking of user inputs for things like command injection characters or escaping characters must be done by whatever calls the util_execSystem. 
 
-Previously the Wireless Setup was run and the user specified SSID and PSK were passed onto the util_execSystem however the debugging messages shown in the UART console logs showed that the user speicifed values had each individual character escaped by single quotation marks. This is done to prevent command injection as any characters such as ";" or "&" will only be interpretted as a string and not as part of the command. 
+Previously the Wireless Setup was run and the user-specified SSID and PSK were passed onto the util_execSystem however the debugging messages shown in the UART console logs showed that the user specified values had each individual character escaped by single quotation marks. This is done to prevent command injection as any characters such as ";" or "&" will only be interpreted as a string and not as part of the command. 
 
-Further investigation was done to see how this escaping was performed. In order to locate the file or binary that was making the specific util_execSystem call that was printing the debug message seen earlier strings and grep was used to search for words in the string (keeping in mind the formatting of the input string performed by the util_execSystem function itself. The string used that matched the formatting previously seen in the util_execSystem function was found again in the libcmm.so shared object. 
+Further investigation was done to see how this escaping was performed. In order to locate the file or binary that was making the specific util_execSystem call that was printing the debug message seen earlier strings and grep were used to search for words in the string (keeping in mind the formatting of the input string performed by the util_execSystem function itself. The string used that matched the formatting previously seen in the util_execSystem function was found again in the libcmm.so shared object. 
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/iwpriv_strings_grep.png)
 
@@ -1168,7 +1168,7 @@ Searching for the string making use of the strings search in Ghidra led to the f
 
 ![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ghidra_iwpriv_reference.png)
 
-The string had 9 references to it in the rest of the libcmm.so, following the first external reference luckily led to the correct function that was performing the util_execSystem call from the previous wireless setup test. Unfortunately this function had it's label (name) removed in the compilation process and as such Ghidra added the generic FUN_XXXX label to it. 
+The string had 9 references to it in the rest of the libcmm.so, following the first external reference luckily led to the correct function that was performing the util_execSystem call from the previous wireless setup test. Unfortunately, this function had its label (name) removed in the compilation process and as such Ghidra added the generic FUN_XXXX label to it. 
 
 ```
 int FUN_000aa1e8(int param_1,undefined4 param_2,char *param_3,int param_4,undefined4 unsan_ssid)
@@ -1296,9 +1296,9 @@ int FUN_000aa1e8(int param_1,undefined4 param_2,char *param_3,int param_4,undefi
 
 ```
 
-The util_execSystem function call in reference was located using the specific formatting string "iwpriv %s set SSID=%s" that previously found. 
+The util_execSystem function call in reference was located using the specific formatting string "iwpriv %s set SSID=%s" that was previously found. 
 
-The parameters being passed into the function lined up with what was expected from the investigation of the util_execSystem function. The last parameter was cleary the SSID, searching through the rest of the function for more references to the SSID variable showed that above the util_execSystem call in question another function "FUN_000aa13c" was called and passed the SSID variable. 
+The parameters being passed into the function lined up with what was expected from the investigation of the util_execSystem function. The last parameter was clearly the SSID, searching through the rest of the function for more references to the SSID variable showed that above the util_execSystem call in question another function "FUN_000aa13c" was called and passed the SSID variable. 
 
 Following the function in libcmm.so showed that the function was responsible for performing the character escaping on the SSID. 
 
@@ -1335,11 +1335,11 @@ void FUN_000aa13c(int param_1,char *param_2)
 }
 
 ```
-Review of the function indicated that it iterated over the unsanitized SSID and performed individual character espacing by first checking if the character was already a single quote and if it was adding the c escape character "\" infront of it. It then padded each individual character by shifting a single quotation "'" infront of and behind each character. 
+A review of the function indicated that it iterated over the unsanitized SSID and performed individual character escaping by first checking if the character was already a single quote and if it was adding the c escape character "\" in front of it. It then padded each individual character by shifting a single quotation "'" in front of and behind each character. 
 
 This function was also called prior to the util_execSystem call that used the PSK specified by the user. 
 
-The character escaping appears to be properly implemented so this specific call of the util_execSystem does not appear vulnerable to command injection, however Ghidra noted that there are 510 references to the function inside the libcmm.so file. Upon initial inspection many of these appear to be other functions that are calling util_execSystem. These functions should be reviewed to check if there is anyway to pass unsatized user inputs into the util_execSystem function. 
+The character escaping appears to be properly implemented so this specific call of the util_execSystem does not appear vulnerable to command injection, however, Ghidra noted that there are 510 references to the function inside the libcmm.so file. Upon initial inspection, many of these appear to be other functions that are calling util_execSystem. These functions should be reviewed to check if there is any way to pass unsanitized user inputs into the util_execSystem function. 
 
 
 
