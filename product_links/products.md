@@ -27,6 +27,21 @@ Link 1: https://www.tp-link.com/us/where-to-buy/
 
 Link 2: https://www.amazon.com/TP-Link-N300-Wireless-Wi-Fi-Router-TL-WR841N/dp/B001FWYGJS
 
+## Number 1 Phillips Screw Driver
+
+**Where is this used:** Used to open the two retaining screws on the router. 
+
+**Alternative to purchasing:** You'll need this to open the router, pretty much any Number 1, 0 or 00 Phillips screwdriver will work for this. 
+
+**Links to Purchase:**
+
+Note - you don't need to purchase these specific ones - I'm only linking for convenience if you need to buy one. Use whatever ph1/ph0 screwdriver you prefer or have. 
+
+Link to Jewellers Screw Driver Kit: https://www.amazon.com/Screwdriver-Eyeglass-Precision-Different-Screwdrivers/dp/B07YJG766F
+
+Number 1 Phillips Screwdriver: https://www.amazon.com/Wera-05118020001-Screwdriver-Electronic-Applications/dp/B0001P18LO
+
+
 ## UART to USB Adapter: CP2102 TTL USB to UART Adapter
 
 **Where this is used:** This tool is used to interface with the UART pins on the router and establish a serial shell connection. 
@@ -49,7 +64,7 @@ Link 4: https://www.aliexpress.com/item/1005003536455256.html
 
 **Where this is used:** These are used to enable a connection to the UART pins on the router. The router PCB has bare through-hole pads exposed for UART and in order to interface with them with the other tools we need to attach these header pins. A solderless option using these pins is demonstrated in the course. 
 
-**Alternative to purchasing:** Unfortunately there is not a great alternative to purchasing this, luckily they are not expensive and are a great component to keep in your home lab. That being said, if you do purchase one of the ch341a programmers below many of them come with 4 pin headers for breakout additions and you could use one of those. 
+**Alternative to purchasing:** Unfortunately there is not a great alternative to purchasing this, luckily they are not expensive and are a great component to keep in your home lab. That being said, if you do purchase one of the ch341a programmers below many of them come with 4-pin headers for breakout additions and you could use one of those. 
 
 **Links to Purchase:**
 
@@ -106,6 +121,10 @@ Link 2: https://www.amazon.com/Geekstory-CH341A-EEPROM-Programmer-Module/dp/B098
 Link 3: https://www.aliexpress.com/item/32793476447.html
 
 # Optional:
+
+## Spudger Set
+
+https://www.amazon.com/STREBITO-Spudger-Ultimate-Computer-Electronics/dp/B0BHPC2WB5
 
 ## Soldering Station: Weller WLC100
 
