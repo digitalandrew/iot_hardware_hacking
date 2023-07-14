@@ -124,7 +124,7 @@ Link 3: https://www.aliexpress.com/item/32793476447.html
 
 ## Spudger Set
 
-https://www.amazon.com/STREBITO-Spudger-Ultimate-Computer-Electronics/dp/B0BHPC2WB5
+Link: https://www.amazon.com/STREBITO-Spudger-Ultimate-Computer-Electronics/dp/B0BHPC2WB5
 
 ## Soldering Station: Weller WLC100
 
