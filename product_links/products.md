@@ -19,7 +19,7 @@ None of the links provided are affiliate links and I make no commission of of th
 
 **Where is this used:** The router is used throughout almost the entire course as the practice target that we will be using for practicing taking measurements, sniffing communications and extracting firmware. 
 
-**Alternative to purchasing:** If you are unable to or would prefer not to purchase this router then you won't be able to follow along with any of the hands-on measuring or testing, however, I'll make things like the analyzer captures available and you can download a copy of the firmware for analysis from the TP-Link website. With these files, you'll still be able to follow along with and complete all the portions of the course that rely on analyzing the captures and firmware and reverse engineering. If you choose to not purchase the router then I'd suggest skipping the rest of the tools below as you'll need something to test or use the tools on. 
+**Alternative to purchasing:** If you are unable to or would prefer not to purchase this router then you won't be able to follow along with any of the hands-on measuring or testing, however, I'll make things like the analyzer captures available and you can download a copy of the firmware for analysis from the TP-Link website. With these files, you'll still be able to follow along with and complete all the portions of the course that rely on analyzing the captures and firmware. If you choose to not purchase the router then I'd suggest skipping the rest of the tools below as you'll need something to test or use the tools on. 
 
 **Links to Purchase:**
 
