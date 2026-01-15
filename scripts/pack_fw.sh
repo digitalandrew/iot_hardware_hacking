@@ -9,6 +9,20 @@ fi
 # Remove old squashfs file to avoid appending
 rm -f rfs.squashfs
 
+# Create essential device nodes if they don't exist
+DEV_DIR="../patch_rfs/dev"
+if [ ! -c "$DEV_DIR/null" ]; then
+    echo "Creating essential device nodes..."
+    sudo mknod "$DEV_DIR/null" c 1 3 && sudo chmod 666 "$DEV_DIR/null"
+    sudo mknod "$DEV_DIR/console" c 5 1 && sudo chmod 620 "$DEV_DIR/console"
+    sudo mknod "$DEV_DIR/zero" c 1 5 && sudo chmod 666 "$DEV_DIR/zero"
+    sudo mknod "$DEV_DIR/random" c 1 8 && sudo chmod 666 "$DEV_DIR/random"
+    sudo mknod "$DEV_DIR/urandom" c 1 9 && sudo chmod 666 "$DEV_DIR/urandom"
+    sudo mknod "$DEV_DIR/ttyS0" c 4 64 && sudo chmod 660 "$DEV_DIR/ttyS0"
+    sudo mknod "$DEV_DIR/ttyS1" c 4 65 && sudo chmod 660 "$DEV_DIR/ttyS1"
+    echo "Device nodes created."
+fi
+
 #create squashfs file system with original firmware settings and proper ownership
 mksquashfs ../patch_rfs/ rfs.squashfs -comp xz -b 262144 -always-use-fragments -all-root
 
