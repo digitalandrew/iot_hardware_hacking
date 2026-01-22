@@ -40,15 +40,15 @@ Inspected exterior of the router, and noted label on the back that contained FCC
 
 FCC ID: 2AXJ4WR841NV14
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/router_ffc_id.jpg)
+<img width="623" height="470" alt="image" src="https://github.com/user-attachments/assets/2acc39e7-761f-4a6b-a083-802919302e26" />
 
 Opened router case by removing two Phillips screws and applying pressure between pressure-fit parts with a spudger tool.
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/router_opened.jpg)
+<img width="624" height="468" alt="image" src="https://github.com/user-attachments/assets/de6dc81c-ffc0-4fe6-97cf-70552a023608" />
 
 Noted three chips of interest on the PCB for further inspection (shown as details A, B, and C in the picture below)
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/router_areas_of_interest.jpg)
+<img width="624" height="468" alt="image" src="https://github.com/user-attachments/assets/c1de48f1-a9bd-4e12-a282-cbac6f4846e5" />
 
 ## On-board testing
 
@@ -71,7 +71,7 @@ Soldered through hole inline header pins to suspected UART connection to facilit
 
 Attached Logic Analyzer to TX and GND pins of UART connection and captured a transmission during boot up, a screenshot of single transmission frame shown below. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/Uart_Capture_Single_Frame.png)
+<img width="624" height="234" alt="image" src="https://github.com/user-attachments/assets/aa52704e-d7cb-4841-947b-ad1389765495" />
 
 Manual framing of the signal confirmed a UART transmission, noted the start bit, 8 data bits, one stop bit and no parity bit. 
 
@@ -79,11 +79,11 @@ Measured the baud rate as 125,000 however based on standard serial baud rates su
 
 Based on these findings applied a UART decoder to the channel with the below settings. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/uart_decoder_settings.png)
+<img width="531" height="660" alt="image" src="https://github.com/user-attachments/assets/737c3c58-1c61-42d1-babc-9614bd05098f" />
 
 Decoded UART signal confirmed UART parameters and showed the presence of a boot loader and boot-up logs to be investigated further. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/uart_decoded_message.png)
+<img width="623" height="193" alt="image" src="https://github.com/user-attachments/assets/0fdb0653-59a9-46a0-a6fd-2ac8f1a319fe" />
 
 ## OSINT and Online Recon
 
@@ -91,15 +91,15 @@ Used previously located FCC ID to find FCC Equipment Authorization filing for th
 
 Noted in the filing that the ID had been changed from the previous TE7WR841NV14. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ffc_id_change_request.png)
+<img width="625" height="442" alt="image" src="https://github.com/user-attachments/assets/b58b7e0a-7a7b-4e21-b3f7-da17817c4cf4" />
 
 Inspecting the previous filing (https://fccid.io/TE7WR841NV14) internal photos of the router were located. Unfortunately, schematics, functional descriptions and block diagrams were redacted as confidential. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/fcc-id-1.png)
+<img width="624" height="468" alt="image" src="https://github.com/user-attachments/assets/0b46eb5d-076a-40d8-a87d-be7b7cccd5ce" />
 
 Detailed pictures of two chips of interest were shown that detailed the chip manufacturer and part number. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ffc-id-mediatek.png)
+<img width="624" height="467" alt="image" src="https://github.com/user-attachments/assets/5a69a82f-9693-4a8a-b81e-a442bc82374c" />
 
 Previously denoted chip A Id'd as MEDIATEK MT7628NN
 
@@ -109,7 +109,7 @@ Previously denoted chip B Id'd as Zentel A3S56D40GTP -50L
 
 Unfortunately, the markers on chip C were not readable in the FCC pictures. Returning to the test router, high-resolution pictures were taken and blown up to Id chip. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/cfeon_chip_id.jpg)
+<img width="624" height="833" alt="image" src="https://github.com/user-attachments/assets/69124201-be08-4436-a15f-148f99495835" />
 
 Chip C was Id'd as cFeon QH32B-104HIP.
 
@@ -139,9 +139,7 @@ Connected test computer to the network hosed by the router. Router IP address id
 
 Nmap scans were performed for both TCP and UDP. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/nmap_tcp_scan.png)
-
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/nmap_tcp_scan_2.png)
+<img width="624" height="366" alt="image" src="https://github.com/user-attachments/assets/587f1ec6-6b3c-484a-a35e-85768c1d8ca6" />
 
 TCP scans revealed 3 open ports:
 
@@ -155,7 +153,7 @@ Notable detail confirmed the suspicion that the router is running Linux kernel 2
 
 UDP scans revealed 2 open ports: 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/nmap_udp_scan.png)
+<img width="624" height="229" alt="image" src="https://github.com/user-attachments/assets/5794856e-507f-4282-8da8-ef1ee78e13d6" />
 
 Port 67/udp - dhcps
 
@@ -176,7 +174,7 @@ https://ktln2.org/2020/03/29/exploiting-mips-router/
 ## Reviewing Bootlogs
 Connected USB to UART adapter to the previously located UART pins based on the below pinout:
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/UART+to+USB+pinout.jpg)
+<img width="624" height="468" alt="image" src="https://github.com/user-attachments/assets/1e6b1356-68cc-4690-a184-bcaf0fac9d21" />
 
 Opened Terminal Session via Screen with the previously identified baud rate.
 
@@ -731,11 +729,12 @@ Usually this CLI provides access to tools to read and write to memory, set envir
 
 Pressing Enter revealed there was shell access with no login as root user:
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/initial_shell_access.png)
+<img width="624" height="244" alt="image" src="https://github.com/user-attachments/assets/7a831137-2893-438b-8e45-7e33bf65b30a" />
+
 
 Checking over the available binaries in the bin folder, busybox was discovered: 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/busbox_bin_id.png)
+<img width="624" height="379" alt="image" src="https://github.com/user-attachments/assets/43ba66e8-bcda-48e9-a94c-3815487c1b6c" />
 
 Busybox is a popular binary used on embedded systems as it packages many common Linux/Unix binaries into one smaller package. 
 
@@ -761,7 +760,7 @@ Using the new full version of Busybox grep was utilized to search for files with
 
 Command: `/var/temp/_tools/busybox-mipsel grep -r 'pass' .`
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/grepping_pass.png)
+<img width="624" height="104" alt="image" src="https://github.com/user-attachments/assets/b2a9afee-0360-40d0-b2f3-db72a1a7b721" />
 
 Noted three config files that may contain passwords and what appears to be a hashed password for Dropbear. 
 
@@ -769,15 +768,16 @@ Config file passwords were blank, Dropbear hash was saved to attempt to crack at
 
 Command: `/var/temp/_tools/busybox-mipsel grep -r 'pass' .`
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/grep_admin.png)
+<img width="624" height="337" alt="image" src="https://github.com/user-attachments/assets/58c7b15b-96eb-4e35-ae3f-1ff3ba7853a7" />
 
 Command: `/var/temp/_tools/busybox-mipsel find -name '*.xml'`
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/find_xml.png)
+<img width="624" height="188" alt="image" src="https://github.com/user-attachments/assets/0645153a-75cb-499c-9268-b3cedbe23621" />
+
 
 Command: `/var/temp/_tools/busybox-mipsel find -name '*.conf'`
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/find_conf.png)
+<img width="624" height="226" alt="image" src="https://github.com/user-attachments/assets/25e2623a-e90f-4d9f-a75c-ca863bee4d22" />
 
 Further enumeration of the config files did not reveal any additional useful information. 
 
@@ -789,7 +789,7 @@ Command on Kali VM: `hashcat -a 0 -m 500 admin.hash /usr/share/wordlists/rockyou
  
 Admin Password cracked as "1234" 
 
-![iamge](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/hash_cat_admin.png)
+<img width="624" height="454" alt="image" src="https://github.com/user-attachments/assets/4ffc68a4-f821-4de4-9f61-af77f019613a" />
 
 Dropbear hash form dropbearpasswd file was identified as normal MD5 hash and cracked using the below command.
 
@@ -799,7 +799,7 @@ Dropbear password was cracked "1234qwer" this was noted to be the password that 
 
 The password file is dynamically created on startup from the router's admin password. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/dropbear_hash.png)
+<img width="624" height="454" alt="image" src="https://github.com/user-attachments/assets/18d24f3e-a08e-4764-9474-fa69a3cfd0bc" />
 
 ## Checking Running Processes and Network Connections
 
@@ -807,7 +807,7 @@ The busybox binary transferred was used again to check the running processes via
 
 Command: `/var/temp/_tools/busybox-mipsel ps`
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ps.png)
+<img width="624" height="668" alt="image" src="https://github.com/user-attachments/assets/8dd1a9d1-21fa-4185-ab9d-4ad7fa100d17" />
 
 Noted that all processes were running as the admin user and there was no principle of least privilege being followed. 
 
@@ -815,13 +815,13 @@ The same process was followed to check running processes using netstat.
 
 Command: `/var/temp/_tools/busybox-mipsel netstat` 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/netstat+-+Copy.png)
+<img width="624" height="457" alt="image" src="https://github.com/user-attachments/assets/3cc9641c-af66-4658-a17c-c30cd3821e72" />
 
 ## Prompting Additional Console Log Messages
 
 Looking through the unprompted console log messages one repeating log message stood out:
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/util_execSystem.png)
+<img width="624" height="383" alt="image" src="https://github.com/user-attachments/assets/b5edae44-2925-415d-b484-1aca3f12caa1" />
 
 A repeated call by `[  util_execSystem  ]` appears to be indicative of a log from a function in a shared object library. 
 
@@ -830,7 +830,8 @@ It also appears to be a system call which is a c function that allows the runnin
 These console log messages, especially those which allow tracing back to specific functions can allow for easier reverse engineering. To test this the wireless setup of the router was performed using the web portal. 
 
 Wireless Setup
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/wireless_setup.png)
+<img width="624" height="383" alt="image" src="https://github.com/user-attachments/assets/a1598293-9a96-4ae5-a665-ee5267983ed4" />
+
 
 This triggered many console logs that showed the use of the execSystem function for user-supplied inputs. 
 
@@ -943,11 +944,11 @@ From the previous recon, it was confirmed that the flash ROM on the board (EN25Q
 
 The initial boot process was captured as this process contains many reads from the processor to the flash ROM. The logic analyzer confirmed the SPI function of the flash ROM matched that of the datasheet. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/SPI_capture.png)
+<img width="615" height="364" alt="image" src="https://github.com/user-attachments/assets/70a5f1ed-02ce-465c-b3fc-547a20aaf7ef" />
 
 After confirming the SPI flash functioned as expected a ch341a flash programmer was connected to the flash ROM as per the data sheet pinout in order to read the entire contents of the flash ROM. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ch341a_programmer_setup.jpg)
+<img width="624" height="468" alt="image" src="https://github.com/user-attachments/assets/d71ca973-0b78-4bfe-902b-f3a568e3cc8b" />
 
 The firmware was then extracted from the ROM using flashrom and the following command:
 
@@ -961,7 +962,7 @@ To confirm the firmware extraction was successful an initial analysis was perfor
 
 The initial analysis by binwalk showed that the extraction appeared to be successful as it was able to pickout three partitions on the firwmare that very closely matched the partition table that was previously observed during bootup. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/binwalk_init_analysis.png)
+<img width="484" height="182" alt="image" src="https://github.com/user-attachments/assets/6f546e38-1754-4bbd-b01b-37de2ce5a8b5" />
 
 As an additional confirmation, the entropy of the file was analyzed using binwalk. 
 
@@ -974,8 +975,6 @@ The second partition matched the starting address location and length of the ker
 The third partition also matched the starting address location and length of the root file system, in addition the entropy shows that it is in fact compressed as well. 
 
 An additional partition or section of data is visible in the entropy analysis that binwalk was not able to identify previously, this most likely indicates an encrypted section. 
-
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/binwalk_entropy.png)
 
 Binwalk was then used to automatically extract the contents of the firmware. 
 
@@ -995,9 +994,6 @@ Strings was then used to identify any binaries or shared object files that had t
 
 This revealed that the libcmm.so shared object file had both the xml file names as strings in it. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/strings_xml_files.png)
-
-
 # Reverse Engineering
 
 ## Locating Decryption Algorithm and Key
@@ -1006,7 +1002,7 @@ The libcmm.so was loaded in Ghidra and decompiled in an attempt to reverse engin
 
 Running a search for "decrypt" in Ghidra revealed a function called "dm_decryptFile" that was then investigated further. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ghidra_decrypt_search.png)
+<img width="588" height="290" alt="image" src="https://github.com/user-attachments/assets/539d24ed-1a04-46be-b32a-b58ae82f208b" />
 
 Upon initial inspection of the decompiled, based on the error messaging this appeared to be the correct function to decrypt the config files. 
 
@@ -1048,7 +1044,7 @@ int dm_decryptFile(uint dm_file_size,undefined4 param_2,uint dec_buf_size,int pa
 
 Reverse engineering of the function revealed that based on the error messaging and the cen_desMinDo() function the encryption algorithm appears to be DES. Further research on the DES algorithm reveals that it uses 64-bit (8 x 8 bytes) keys. An array of 8 chars was noted to be created at the start of the function and then memcpy is later used to copy 8 bytes into it from a data location in the .data section of the shared object file. Inspecting the data location revealed what appears to be the DES encryption key. As DES is a symmetric encryption algorithm it can also be used for decryption. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ghidra_des_enc_key.png)
+<img width="624" height="273" alt="image" src="https://github.com/user-attachments/assets/a8c9d6d4-e184-4545-a137-acaebf049671" />
 
 **DES Encryption Key:** 478DA50FF9E3D2CB
 
@@ -1163,11 +1159,11 @@ Previously the Wireless Setup was run and the user-specified SSID and PSK were p
 
 Further investigation was done to see how this escaping was performed. In order to locate the file or binary that was making the specific util_execSystem call that was printing the debug message seen earlier strings and grep were used to search for words in the string (keeping in mind the formatting of the input string performed by the util_execSystem function itself. The string used that matched the formatting previously seen in the util_execSystem function was found again in the libcmm.so shared object. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/iwpriv_strings_grep.png)
+<img width="624" height="354" alt="image" src="https://github.com/user-attachments/assets/cb4fbcba-9360-4e23-9037-5d8e8f939853" />
 
 Searching for the string making use of the strings search in Ghidra led to the function that appeared to be calling util_execSystem to update the SSID when the wireless setup was being performed in the previous test. 
 
-![image](https://iot-hw-hacking-resources.s3.us-east-2.amazonaws.com/ghidra_iwpriv_reference.png)
+<img width="624" height="267" alt="image" src="https://github.com/user-attachments/assets/2f1ca1bb-210d-4f1a-9fa8-c6d55d802fef" />
 
 The string had 9 references to it in the rest of the libcmm.so, following the first external reference luckily led to the correct function that was performing the util_execSystem call from the previous wireless setup test. Unfortunately, this function had its label (name) removed in the compilation process and as such Ghidra added the generic FUN_XXXX label to it. 
 
