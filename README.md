@@ -11,3 +11,17 @@ These are located in the resources directory.
 
 ## Further YouTube Resources
 I'm uploading additional lessons using the same router from the course to YouTube including topics like firmware modifications. Check out my channel [here](https://www.youtube.com/@D1gitalAndrew)
+
+## Ethical Use & Responsible Disclosure
+
+This repository contains notes, walkthroughs, and review material created as part of an ethical security assessment performed for educational purposes in the context of IoT and hardware security research. The content is intended to help learners understand real-world security concepts, common misconfigurations, and defensive best practices in a safe and responsible way.
+
+To keep this course aligned with ethical hacking standards:
+
+- No critical, directly exploitable vulnerabilities or full weaponized attack chains are intentionally demonstrated in this repo.
+
+- You are expected to use this material only on systems you own or have explicit permission to test.
+
+- If you identify a potential security issue in a device, firmware, service, or related component while working through this content, please follow responsible disclosure practices: report the issue to the appropriate vendor or maintainer, allow reasonable time for remediation, and avoid publishing sensitive details that could enable abuse.
+
+By using this repository, you agree to adhere to ethical hacking guidelines and applicable laws. Misuse of this material is not supported or encouraged.
