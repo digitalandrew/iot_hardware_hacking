@@ -3,7 +3,8 @@ Welcome to the Beginners Guide to IoT and Hardware Hacking official git reposito
 
 ## Where to find the course
 - You can catch the first 2/3 of the course for free here on [YouTube](https://www.youtube.com/watch?v=j8SqZLr64NA)
-- You can take the whole course via the [TCM Security Academy](https://www.tcm.rocks/iot-course-abws)
+- You can take the whole course via a subscription to the [TCM Security Academy](https://www.tcm.rocks/iot-course-abws)
+- You can purchase the course as a one-time life time purchase here: [Brown Fine Security Academy](https://training.brownfinesecurity.com/l/pdp/beginner-s-guide-to-iot-and-hardware-hacking)
 - You can get access to the course included with the purchase of the [Practical IoT Pentest Associate Exam](https://www.tcm.rocks/pipa-abws)
 
 ## Logic Analyzer Captures
